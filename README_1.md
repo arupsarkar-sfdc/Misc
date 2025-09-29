@@ -24,11 +24,20 @@ graph TB
         PL1 --> AG1
     end
     
+    %% Enhanced color coding by service layer and type
+    classDef salesforce fill:#a7e8a7,stroke:#4caf50,stroke-width:3px
     classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
     classDef auth fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef compute fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    classDef storage fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    classDef events fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
     
+    class SF1 salesforce
     class NC1,PL1 auth
     class AG1 security
+    class L1 compute
+    class S3_1,RDS1 storage
+    class EB1 events
 ```
 
 ## 2. Salesforce to MuleSoft Direct Connectivity
@@ -55,11 +64,25 @@ graph TB
         SF2 <-->|"🔔 Platform Events"| MS1
     end
     
+    %% Enhanced color coding by service layer and type
+    classDef salesforce fill:#a7e8a7,stroke:#4caf50,stroke-width:3px
     classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
     classDef auth fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef integration fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    classDef connector fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    classDef api_system fill:#fce4ec,stroke:#ad1457,stroke-width:2px
+    classDef api_process fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+    classDef api_experience fill:#fff8e1,stroke:#fbc02d,stroke-width:2px
+    classDef external fill:#f5f5f5,stroke:#616161,stroke-width:2px
     
+    class SF2 salesforce
     class NC2 auth
-    class MS1 security
+    class MS1 integration
+    class SFC connector
+    class API1 api_system
+    class API2 api_process
+    class API3 api_experience
+    class DB1 external
 ```
 
 ## 3. Hybrid Architecture: Salesforce → AWS → MuleSoft
