@@ -206,7 +206,23 @@ graph TB
     class AG3,MS3 security
 ```
 
-## Security Considerations Legend
+## Color Coding & Security Legend
+
+### Service Layer Color Classification
+
+| Color | Service Type | Description |
+|-------|-------------|-------------|
+| 🟢 Green | Salesforce | Core Salesforce platform services |
+| 🔵 Blue | Authentication | Security and authentication components |
+| 🔴 Red | API Gateway | Entry points and security enforcement |
+| 🟠 Orange | Compute/Integration | Processing and integration services |
+| 🟣 Purple | Storage | Data storage and persistence layers |
+| 🟢 Light Green | Events | Event streaming and messaging |
+| 🔷 Light Blue | Connectors | Integration connectors and adapters |
+| 🟤 Pink/Red Variants | API Layers | System, Process, and Experience APIs |
+| ⚪ Gray | External | Third-party and external systems |
+
+### Security Considerations Legend
 
 | Symbol | Security Type | Description |
 |--------|--------------|-------------|

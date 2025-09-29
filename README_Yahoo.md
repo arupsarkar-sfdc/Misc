@@ -134,6 +134,15 @@ sequenceDiagram
     %%{init: {"sequence": {"actorMargin": 50, "boxMargin": 10, "boxTextMargin": 5, "messageMargin": 35, "mirrorActors": false, "wrap": true}}}%%
 ```
 
+#### Query Flow Phase Color Legend
+
+| Phase | Color | Description |
+|-------|-------|-------------|
+| 🧠 Optimization | 🟡 Light Yellow | Hyper Optimizer processes and optimizes the query |
+| 🔧 Pre Stage | 🔵 Light Blue | Spark sets up temporary views and connections |
+| 🚀 Main Stage | 🟢 Light Green | Actual query execution with remote database interaction |
+| 🧹 Post Stage | 🔴 Light Red | Cleanup operations and resource disposal |
+
 ## Optimization Process
 
 ### 1. Predicate Pushdown
