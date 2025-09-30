@@ -526,6 +526,225 @@ Five test targets cover different aspects:
 - **Target D**: Spark SQL statement execution
 - **Target E**: VDAL connectivity
 
+
+## What Happens When a Large Dataset Is Returned?
+
+### Understanding Data Transfer in Query Federation
+
+The federation architecture optimizes queries **before** data movement occurs, not during retrieval. The primary goal is to reduce the volume of data that needs to be transferred across the network.
+
+### Scenario: 20 Million Rows Selected
+
+#### Without Optimization (Pre-252 Behavior)
+
+**Query:**
+```sql
+SELECT customer_id, order_total
+FROM snowflake_orders
+WHERE order_date >= '2024-01-01' 
+  AND status = 'COMPLETED'
+  AND order_total > 1000
+```
+
+**Execution Flow:**
+```
+1. Spark → Snowflake: "SELECT * FROM orders"
+2. Snowflake returns: ALL 20 million rows
+3. Network transfer: 20M rows from Snowflake to Spark
+4. Spark applies filters in memory
+5. Final result: 50,000 rows after filtering
+```
+
+**Impact:**
+- **Data transferred:** 20 million rows
+- **Network bottleneck:** Severe
+- **Processing time:** High (dominated by data transfer)
+- **Resource usage:** Excessive memory in Spark
+
+#### With Pushdown Optimization (252+ Behavior)
+
+**Same Query, Optimized:**
+
+**Execution Flow:**
+```
+1. Service sends DC SQL to Hyper
+2. Hyper optimizes: pushes filters down
+3. Hyper generates Spark SQL with embedded Snowflake query
+4. Spark → Snowflake via VDAL:
+   SELECT customer_id, order_total
+   FROM orders
+   WHERE order_date >= '2024-01-01'
+     AND status = 'COMPLETED'
+     AND order_total > 1000
+5. Snowflake executes filters internally:
+   - Uses indexes
+   - Leverages partitioning
+   - Applies predicate evaluation
+6. Snowflake returns: 50,000 pre-filtered rows
+7. Network transfer: Only 50K rows
+```
+
+**Impact:**
+- **Data transferred:** 50,000 rows (400× reduction)
+- **Network bottleneck:** Minimized
+- **Processing time:** Much faster
+- **Resource usage:** Efficient
+
+### Data Retrieval Mechanisms
+
+#### JDBC/ODBC Batching
+
+When results must be transferred, standard database connectivity mechanisms handle the streaming:
+
+```mermaid
+sequenceDiagram
+    participant Spark as Spark Engine
+    participant VDAL as VDAL/DAS
+    participant Snowflake as Snowflake
+
+    Spark->>VDAL: Execute query
+    VDAL->>Snowflake: Send optimized SQL
+    
+    Note over Snowflake: Process query:<br/>- Apply filters<br/>- Execute joins<br/>- Use indexes
+    
+    Snowflake->>Snowflake: Prepare result set<br/>(50K rows)
+    
+    loop JDBC Fetch Batches
+        Snowflake-->>VDAL: Batch (10K rows)
+        VDAL-->>Spark: Batch (10K rows)
+        Spark->>Spark: Process batch
+    end
+    
+    Note over Spark: All batches received<br/>Query complete
+```
+
+**Key Points:**
+- VDAL uses JDBC/ODBC connectors to remote databases
+- Results are fetched in batches (typically 10,000-100,000 rows per batch)
+- This is connection-level batching, not query-level optimization
+- Batching helps with memory management but doesn't reduce total transfer
+
+#### No Lazy Evaluation at Query Level
+
+The document does not describe lazy evaluation or streaming query execution. The optimization approach is:
+
+1. **Optimize first** - Determine what data is truly needed
+2. **Execute once** - Send the complete optimized query to the remote system
+3. **Transfer results** - Retrieve filtered/joined/aggregated results in JDBC batches
+
+### Optimization Impact on Data Volume
+
+| Optimization Level | Input Rows | Operations | Output Rows | Data Transferred |
+|-------------------|-----------|------------|-------------|------------------|
+| None | 20M | None | 20M → 50K | 20M rows |
+| Filter pushdown | 20M | Filter remote | 50K | 50K rows |
+| Filter + Join pushdown | 20M + 20M (2 tables) | Filter + Join remote | 50K | 50K rows |
+| Full pushdown + Aggregation | 20M + 20M | Filter + Join + Aggregate | 100 rows | 100 rows |
+
+### When Pushdown Cannot Help
+
+Some queries genuinely require transferring large datasets:
+
+#### Case 1: Machine Learning Data Export
+```sql
+-- Need all rows for model training
+SELECT * FROM customer_events
+WHERE event_date >= '2024-01-01'
+-- Result: 20M rows needed for ML pipeline
+```
+
+#### Case 2: Full Table Migration
+```sql
+-- Moving data between systems
+SELECT * FROM legacy_system_table
+-- Result: All 20M rows must be transferred
+```
+
+#### Case 3: Complex Aggregations Not Supported
+```sql
+-- Advanced analytics requiring custom UDFs
+SELECT customer_id, custom_aggregation_function(events)
+FROM events
+GROUP BY customer_id
+-- Result: Cannot push down custom UDF, may need raw data
+```
+
+**In these scenarios:**
+1. JDBC batching manages memory (10K-100K rows per fetch)
+2. Spark's distributed processing handles the volume across workers
+3. Network transfer time remains unavoidable
+4. Consider alternative strategies:
+   - Pre-materialization in the remote system
+   - Incremental processing (partition by date)
+   - Sampling for exploratory analysis
+   - Using remote compute (e.g., Snowflake UDFs) when possible
+
+### Performance Benchmarks
+
+From the document's TPC-DS 1GB benchmark on Snowflake:
+
+**Before Pushdown Optimization:**
+- Geomean execution time: 10 seconds
+- Full table scans transferred to Hyper
+
+**After Pushdown Optimization:**
+- Geomean execution time: 3.6 seconds
+- Filters and joins executed in Snowflake
+- **Performance improvement: 64%**
+
+This improvement stems primarily from reduced data transfer volume, not from streaming mechanisms.
+
+### Best Practices for Large Datasets
+
+1. **Leverage Filters Early**
+   - Apply date ranges, status filters, and categorical filters
+   - These typically reduce data volume by 90%+
+
+2. **Use Aggregations When Possible**
+   ```sql
+   -- Instead of: SELECT * FROM orders (20M rows)
+   -- Use: SELECT date, SUM(amount) FROM orders GROUP BY date (365 rows)
+   ```
+
+3. **Project Only Needed Columns**
+   ```sql
+   -- Instead of: SELECT * (50 columns)
+   -- Use: SELECT customer_id, order_total (2 columns)
+   ```
+
+4. **Partition Large Queries**
+   ```sql
+   -- Process by month instead of all at once
+   SELECT * FROM orders 
+   WHERE order_date BETWEEN '2024-01-01' AND '2024-01-31'
+   ```
+
+5. **Monitor Pushdown Success**
+   - Check Hyper query logs for "pushdown-inhibitors"
+   - Verify filters and joins are pushed to remote systems
+   - Use EXPLAIN to see optimization results
+
+### Memory and Resource Considerations
+
+**Spark Memory Management:**
+- Spark distributes data across worker nodes
+- Each worker processes batches independently
+- Spills to disk if memory exceeded
+- Configured via `spark.executor.memory` and `spark.driver.memory`
+
+**VDAL Connection Pooling:**
+- Maintains connection pools to remote systems
+- Reuses connections for multiple queries
+- Handles connection failures and retries
+- Configured per connection in Data Cloud settings
+
+**Network Bandwidth:**
+- Primary bottleneck for large transfers
+- Typically 1-10 Gbps between cloud regions
+- Cross-cloud transfers (AWS → Azure) are slower
+- Same-region transfers are optimal
+
+
 ## References
 
 - [252] Query Pushdown for Federated Queries in Spark
