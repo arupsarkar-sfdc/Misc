@@ -87,6 +87,7 @@ graph TB
 
 ```mermaid
 graph LR
+
     Provider["Data Provider (Hulu)<br/>Owns: Audience segments<br/>Provides: Targeting capability"] 
     Consumer["Data Consumer (Nike)<br/>Wants: Audience reach<br/>Consumes: Targeting data"]
     
@@ -94,7 +95,7 @@ graph LR
     
     style Provider fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style Consumer fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-    
+
     subgraph "Nike DMO Structure"
         SEG_META["Segment Metadata<br/>━━━━━━━━━━━━━━<br/>segmentID: 77233<br/>segmentName: Nike Running<br/>category: Product Affinity"]
         
