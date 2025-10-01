@@ -93,7 +93,7 @@ graph LR
     
     style Provider fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style Consumer fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-
+```
 ```mermaid
 graph LR
 
