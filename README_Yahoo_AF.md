@@ -1,14 +1,548 @@
-# Agent Graph with Lifecycle Hooks: Bringing True Determinism to Agentforce
+### Key Benefits
 
-## Executive Summary
-
-Agent Graph combined with Reasoning Loop Lifecycle Hooks provides a **hybrid approach** where deterministic workflow control meets agentic intelligence. This solves the core problem: **customers need predictable outcomes while maintaining conversational flexibility**.
+| Aspect | ReAct Agent | Pure FSM (No LLM) | Agent Graph (System 2 + FSM + Memory) |
+|--------|-------------|-------------------|---------------------------------------|
+| **Task Completion** | ❌ Unpredictable | ✅ Guaranteed | ✅ Guaranteed |
+| **Conversation Quality** | ✅ Natural | ❌ Rigid | ✅ Natural |
+| **Memory Persistence** | ❌ Chat history only | ✅ State variables | ✅ Structured buffers |
+| **Derailment Resistance** | ❌ Low | ✅ Perfect | ✅ High |
+| **Adaptability** | ✅ High | ❌ None | ✅ High |
+| **Goal Tracking** | ❌ Implicit | ✅ Explicit | ✅ Explicit FSM |
+| **Interruptibility** | ❌ Loses context | ❌ Breaks flow | ✅ Recoverable |
+| **Multi-turn Reasoning** | ❌ Limited | ❌ None | ✅ Full support |
 
 ---
 
-## The Problem with Pure Stochastic Agents
+## From Design to Runtime: The Complete Pipeline
 
-Traditional Agentforce agents are **non-deterministic**:
+### AFScript → Full Agent JSON → Runtime
+
+```mermaid
+graph TB
+    subgraph "Design Time"
+        AF[AFScript<br/>High-level language]
+        AF --> Compile[Compilation]
+        Compile --> JSON[Full Agent JSON<br/>Metadata:<br/>• Agent config<br/>• Topics<br/>• Actions<br/>• Graph structure]
+    end
+    
+    subgraph "Instantiation"
+        JSON --> Core[Salesforce Core<br/>Stores metadata]
+        Core --> Split{Metadata Split}
+        Split --> Standard[Standard Metadata:<br/>• Topics<br/>• Actions<br/>• Agent versions]
+        Split --> Graph[Graph Metadata:<br/>• FSM structure<br/>• Deterministic controls<br/>• Memory buffers]
+    end
+    
+    subgraph "Runtime"
+        Standard --> Java[Java Planner]
+        Graph --> Java
+        Java --> Daisy[Daisy Python Planner<br/>Graph Runtime Engine]
+        Daisy --> Execute[Execute Agent Graph<br/>With System 2 reasoning]
+        Execute --> Response[User Response]
+    end
+    
+    User[User Query] --> Execute
+    
+    style AF fill:#f0e68c,stroke:#daa520,stroke-width:2px
+    style JSON fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style Graph fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style Daisy fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+    style Execute fill:#d4edda,stroke:#28a745,stroke-width:2px
+```
+
+### What Happens at Runtime
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Java as Java Planner
+    participant Core as Salesforce Core
+    participant Daisy as Daisy (Graph Runtime)
+    participant Memory as Memory Buffer
+    participant FSM as Finite State Machine
+    participant LLM as LLM Gateway
+    
+    User->>Java: Send message
+    Java->>Core: Retrieve agent metadata
+    Core-->>Java: Standard metadata + Graph MD
+    Java->>Daisy: Start session with metadata
+    
+    Daisy->>Memory: Initialize memory buffers
+    Memory-->>Daisy: Empty state ready
+    
+    Daisy->>FSM: Load FSM structure
+    FSM-->>Daisy: Initial state set
+    
+    loop Reasoning Loop with Hooks
+        Daisy->>Daisy: setup_agent
+        Daisy->>Daisy: POST_SETUP_AGENT HOOK
+        Note over Daisy,Memory: Hook checks memory,<br/>injects context
+        
+        Daisy->>LLM: Send request with context
+        LLM-->>Daisy: Response
+        
+        Daisy->>Daisy: call_tool (if needed)
+        Daisy->>Daisy: PRE_AGGREGATE HOOK
+        Note over Daisy,FSM: Hook checks FSM state,<br/>enforces transitions
+        
+        Daisy->>Memory: Update memory buffer
+        Daisy->>FSM: Update state
+        
+        alt Goal Complete
+            FSM-->>Daisy: Transition allowed
+            Daisy->>Daisy: Force handoff to next agent
+        else Goal Incomplete
+            FSM-->>Daisy: Stay in current state
+            Daisy->>Daisy: Lock to current agent
+        end
+    end
+    
+    Daisy->>Java: Final response
+    Java->>User: Deliver message
+```
+
+---
+
+## How Guided Determinism Works: The Complete Picture
+
+### Stochastic Process with Deterministic Guardrails
+
+```mermaid
+graph TB
+    Input[User Input:<br/>"Can I skip this question?"] --> Memory[Memory Buffer Check]
+    
+    Memory --> FSMCheck{FSM State Check:<br/>Current goal complete?}
+    
+    FSMCheck -->|No - Q3 not answered| Guard[Deterministic Guardrails:<br/>• Goal: Complete Q3<br/>• State: Q3_REQUIRED<br/>• Lock: Active]
+    
+    Guard --> PreHook[PRE-REASONING HOOK:<br/>Inject Q3 context]
+    
+    PreHook --> Stochastic[Stochastic Layer:<br/>System 2 LLM Reasoning]
+    
+    Stochastic --> Generate[Generate Response:<br/>Natural language<br/>Empathetic tone<br/>Redirects to Q3]
+    
+    Generate --> PostHook[POST-REASONING HOOK:<br/>Verify Q3 addressed]
+    
+    PostHook --> Validate{Response Valid?}
+    
+    Validate -->|No| Override[Override with<br/>deterministic response]
+    Validate -->|Yes| UpdateMem[Update Memory:<br/>Q3 still pending]
+    
+    UpdateMem --> UpdateFSM[Update FSM:<br/>State: Q3_REQUIRED]
+    
+    UpdateFSM --> Output[Output to User:<br/>"I understand, but I need<br/>to complete Q3 first..."]
+    
+    Output --> Loop{More turns?}
+    Loop -->|Yes| Input
+    Loop -->|No - Q3 answered| Transition[Transition:<br/>FSM: Q3_COMPLETE → Q4_REQUIRED]
+    
+    style Memory fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+    style Guard fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style PreHook fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style PostHook fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style Stochastic fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style UpdateFSM fill:#d4edda,stroke:#28a745,stroke-width:2px
+```
+
+### The Magic: Recency Bias + Memory + FSM
+
+**Research Foundation** (Liu et al., "Lost in the Middle", ICLR 2023):
+
+LLMs have strong **recency bias** - they pay 70% more attention to recent instructions than middle context.
+
+**How We Exploit This:**
+
+1. **Memory Buffer** tracks what's been done and what's needed
+2. **FSM** defines current state and requirements
+3. **Hook** injects current requirement at END of context
+4. **LLM** naturally prioritizes the recent instruction
+5. **Post-Hook** validates the response stayed on track
+
+```mermaid
+graph LR
+    subgraph "Context Window"
+        Old[Earlier Instructions<br/>40% attention]
+        Middle[Middle Context<br/>20% attention]
+        Recent[Hook-Injected Context<br/>70% attention]
+    end
+    
+    subgraph "Hook Injection"
+        Hook[Memory + FSM → Hook]
+        Hook -->|Injects at end| Recent
+    end
+    
+    Recent --> LLM[LLM Processing]
+    LLM --> Strong[Strong Bias<br/>Toward Recent Goal]
+    Strong --> Output[Near-Deterministic<br/>Outcome]
+    
+    style Recent fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style Hook fill:#fff3cd,stroke:#ffc107,stroke-width:3px
+    style Strong fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style Output fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style Middle fill:#f8d7da,stroke:#dc3545,stroke-width:1px
+```
+
+---
+
+## Comparison: Before vs. After Agent Graph
+
+### Scenario: User Attempts Derailment
+
+#### Before: ReAct Agent (v1-v3)
+
+```
+Turn 1:
+User: "Hi, I'm ready for the interview"
+Agent: "Great! Can you carry 20kg? Provide examples."
+
+Turn 2:
+User: "Can I get another question first?"
+Agent: "Of course! Do you have cleaning experience in healthcare?"
+
+Turn 3:
+User: "Actually, can we talk about the benefits instead?"
+Agent: "Sure! Let me tell you about our benefits package..."
+```
+
+❌ **Result**: 
+- Questions out of order
+- Never completed interview
+- User controls flow
+- No goal tracking
+- Lost context
+
+**Memory State**: None (chat history only)
+**FSM State**: None
+**Completion**: Failed
+
+---
+
+#### After: Agent Graph with System 2 + FSM + Memory
+
+```
+Turn 1:
+User: "Hi, I'm ready for the interview"
+[Memory Buffer: {questions_answered: [], current_q: 1, goal: "complete_5_questions"}]
+[FSM State: Q1_REQUIRED]
+[Hook: Inject Q1 context at end of chat]
+Agent: "Thank you! I need to ask 5 questions to assess your qualifications.
+       Question 1: Can you carry 20kg? Please provide specific examples."
+
+Turn 2:
+User: "Can I get another question first?"
+[Memory Buffer: Check - Q1 not answered]
+[FSM State: Still Q1_REQUIRED]
+[Hook: Inject Q1 enforcement]
+Agent: "I understand you might want to move ahead, but I need to confirm
+       this requirement first as it's essential for the role. Can you
+       carry 20kg? Please share examples from your experience."
+
+Turn 3:
+User: "Actually, can we talk about the benefits instead?"
+[Memory Buffer: Check - Q1 still not answered]
+[FSM State: Still Q1_REQUIRED, cannot transition]
+[Hook: Strong Q1 enforcement + memory context]
+Agent: "I'd be happy to discuss benefits after we complete the interview
+       questions. We're on question 1 of 5, and I need to ensure we
+       cover all requirements. Can you carry 20kg? Examples help me
+       understand your capability."
+
+Turn 4:
+User: "Fine. Yes, I carry 25kg bags of grain daily at my current job."
+[Memory Buffer: Update - Q1 answered, store response]
+[FSM State: Q1_COMPLETE → Transition to Q2_REQUIRED]
+[Hook: Inject Q2 context]
+Agent: "Thank you for that detail! That's great experience.
+       Question 2 of 5: Do you have cleaning experience in a healthcare
+       setting? Please describe your experience."
+```
+
+✅ **Result**:
+- Questions in exact order
+- User cannot derail
+- Goal tracking via memory
+- FSM enforces completion
+- Context preserved across turns
+
+**Memory State**: 
+```json
+{
+  "questions_answered": [1],
+  "current_question": 2,
+  "goal_state": "in_progress",
+  "completion_percentage": 20,
+  "responses": ["25kg bags of grain daily"],
+  "can_transition_to_next_agent": false
+}
+```
+
+**FSM State**: `Q1_COMPLETE → Q2_REQUIRED`
+**Completion**: On track (20% done)
+
+---
+
+## The Five Pillars of Guided Determinism
+
+```mermaid
+graph TB
+    subgraph "1. Agent Graph Structure"
+        AG[Directed Graph of Agents<br/>Each node = System 2 agent]
+    end
+    
+    subgraph "2. Finite State Machine"
+        FSM[State Transitions<br/>Completion conditions<br/>Transition guards]
+    end
+    
+    subgraph "3. Memory Buffers"
+        Mem[Persistent Context<br/>Goal tracking<br/>Progress state<br/>Epistemic memory]
+    end
+    
+    subgraph "4. Lifecycle Hooks"
+        Hooks[Pre/Post reasoning hooks<br/>Context injection<br/>Validation<br/>Enforcement]
+    end
+    
+    subgraph "5. System 2 Reasoning"
+        S2[Deliberate planning<br/>Tool usage<br/>Reflection<br/>Natural language]
+    end
+    
+    AG --> Integration[Guided Determinism]
+    FSM --> Integration
+    Mem --> Integration
+    Hooks --> Integration
+    S2 --> Integration
+    
+    Integration --> Benefits[Benefits:<br/>• Predictable outcomes<br/>• Natural conversations<br/>• Goal completion<br/>• Interruptible workflows<br/>• Multi-agent coordination]
+    
+    style Integration fill:#d4edda,stroke:#28a745,stroke-width:4px
+    style Benefits fill:#d4edda,stroke:#28a745,stroke-width:3px
+```
+
+---
+
+## When to Use Agent Graph vs. Traditional Flows
+
+### Decision Framework
+
+| Use Case Type | Recommended Approach | Why |
+|--------------|---------------------|-----|
+| **Simple FAQ chatbot** | Traditional flow or ReAct | No need for complexity |
+| **Linear process (form filling)** | Traditional flow | Deterministic by nature |
+| **Multi-turn with branching** | Agent Graph | Handles complexity gracefully |
+| **Goal-driven tasks** | Agent Graph | FSM ensures completion |
+| **User-interruptible workflows** | Agent Graph | Memory preserves context |
+| **Multi-agent coordination** | Agent Graph | Designed for orchestration |
+| **Complex enterprise workflows** | Agent Graph | Scales better |
+| **Compliance-critical processes** | Agent Graph | Auditability + determinism |
+
+### Red Flags for Traditional Flows
+
+Your use case likely needs Agent Graph if:
+
+- ✓ Users frequently interrupt or go off-script
+- ✓ Tasks have multiple valid completion orders
+- ✓ Need to track progress across sessions
+- ✓ Require escalation with context preservation
+- ✓ Multiple agents need to collaborate
+- ✓ Critical that goals are completed (not just attempted)
+- ✓ Need strong audit trail of decisions
+- ✓ Workflows change frequently (modularity needed)
+
+---
+
+## Implementation Checklist
+
+### Building Your First Agent Graph
+
+**Phase 1: Design**
+- [ ] Map your workflow as a directed graph
+- [ ] Identify all System 2 agent nodes needed
+- [ ] Define FSM states for each node
+- [ ] Design memory buffer structure
+- [ ] Identify where determinism is critical
+- [ ] Specify hook points needed
+
+**Phase 2: Implementation**
+- [ ] Write AFScript or Full Agent JSON
+- [ ] Define action schemas for each node
+- [ ] Implement lifecycle hooks
+- [ ] Set up memory buffer initialization
+- [ ] Configure FSM transition rules
+- [ ] Add validation logic
+
+**Phase 3: Testing**
+- [ ] Test happy path completion
+- [ ] Attempt to derail agent (red team)
+- [ ] Test interruption recovery
+- [ ] Verify memory persistence
+- [ ] Check FSM state transitions
+- [ ] Validate multi-turn conversations
+
+**Phase 4: Refinement**
+- [ ] Tune hook injection points
+- [ ] Optimize memory buffer size
+- [ ] Refine FSM completion conditions
+- [ ] Improve natural language quality
+- [ ] Add edge case handling
+
+---
+
+## Key Takeaways
+
+### 1. Guided Determinism ≠ Removing Intelligence
+
+Agent Graph doesn't make LLMs deterministic—it **guides** their stochastic nature through:
+- **Structure** (graph + FSM)
+- **Memory** (persistent context)
+- **Hooks** (steering mechanisms)
+- **System 2 reasoning** (deliberate planning)
+
+### 2. Memory is the Foundation
+
+Without structured memory buffers, agents lose context. Memory enables:
+- Goal tracking across turns
+- Progress persistence
+- Recovery from interruptions
+- Multi-agent handoffs with context
+
+### 3. FSM Provides the Guardrails
+
+The Finite State Machine ensures:
+- Defined states and transitions
+- Completion conditions
+- Cannot skip required steps
+- Predictable outcomes
+
+### 4. Hooks Inject Control at the Right Time
+
+Lifecycle hooks leverage LLM recency bias:
+- Inject context at end of chat history
+- Validate outputs before proceeding
+- Enforce FSM rules dynamically
+- Enable near-deterministic steering
+
+### 5. System 2 > ReAct for Complex Tasks
+
+For enterprise workflows that require:
+- Multi-turn reasoning
+- Goal completion guarantees
+- Interruptibility
+- Context preservation
+
+→ Use System 2 agents in Agent Graph, not ReAct patterns
+
+---
+
+## Real-World Impact
+
+### Enterprise Use Cases Enabled
+
+**Customer Service:**
+- Multi-step troubleshooting that can be interrupted
+- Escalation to human with full context handoff
+- Guaranteed resolution tracking
+
+**Sales:**
+- Structured qualification process
+- Order-independent information gathering
+- Upsell opportunities without derailing main goal
+
+**HR & Recruitment:**
+- Structured interviews (like Adecco)
+- Onboarding workflows with checkpoints
+- Compliance-critical processes with audit trails
+
+**Healthcare:**
+- Patient intake with required information
+- Symptom triage with safety checks
+- HIPAA-compliant data collection
+
+**Finance:**
+- KYC (Know Your Customer) workflows
+- Fraud investigation processes
+- Regulatory compliance checks
+
+---
+
+## Resources & Next Steps
+
+### Documentation
+- **Dev Site**: sfdc.co/agent-graph-dev
+- **Demo**: sfdc.co/agent-graph-demo
+- **Presentation**: sfdc.co/agent-graph-preso
+- **AFScript**: sfdc.co/afscript-dev
+
+### Research Papers
+- **Lost in the Middle**: Liu et al., ICLR 2023 - [arXiv:2307.03172](https://arxiv.org/abs/2307.03172)
+- **Serial Position Effects in LLMs**: Guo & Vosoughi, 2024 - [arXiv:2402.14153](https://arxiv.org/abs/2402.14153)
+- **ALiBi (Linear Attention Biases)**: Press et al., ICLR 2022 - [arXiv:2108.12409](https://arxiv.org/abs/2108.12409)
+
+### Industry References
+- **OpenAI Agents Guide**: [Practical Guide to Building Agents (PDF)](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf)
+- **Thinking, Fast and Slow**: Daniel Kahneman (System 1 vs System 2)
+
+---
+
+## Conclusion
+
+**Agent Graph with Guided Determinism** represents a paradigm shift in enterprise AI:
+
+Instead of choosing between:
+- ❌ Rigid, deterministic flows (predictable but inflexible)
+- ❌ Agentic intelligence (flexible but unpredictable)
+
+We get **both**:
+- ✅ System 2 reasoning for intelligence
+- ✅ FSM structure for predictability
+- ✅ Memory buffers for context
+- ✅ Lifecycle hooks for control
+
+This enables enterprise-grade AI agents that are:
+- **Reliable** - goals are completed
+- **Intelligent** - conversations feel natural
+- **Recoverable** - interruptions don't break workflows
+- **Auditable** - full state tracking
+- **Composable** - modular, reusable components
+
+**The future of enterprise AI isn't deterministic OR agentic—it's guided determinism.**# Agent Graph with Guided Determinism: System 2 Reasoning Meets FSM Control
+
+## Executive Summary
+
+Agent Graph is Agentforce's core orchestration engine that transforms AI agents from simple ReAct pattern responders into **System 2 reasoning agents** operating within a **Finite State Machine (FSM)**. Combined with Lifecycle Hooks, this creates **guided determinism**—where agents can reason deeply and adapt intelligently while still guaranteeing task completion through structured state management and memory context.
+
+---
+
+## What Makes Agent Graph Different?
+
+### Traditional Flow Builders vs. Agent Graph
+
+```mermaid
+graph TB
+    subgraph "Traditional Flow Builder"
+        TF1[Static Decision Tree]
+        TF2[Hardcoded Paths]
+        TF3[Intent Matching]
+        TF4[Stateless Nodes]
+        TF1 --> Break[Breaks on:<br/>• Out-of-order inputs<br/>• Interruptions<br/>• Clarifying questions<br/>• Multi-turn reasoning]
+    end
+    
+    subgraph "Agent Graph System"
+        AG1[System 2 Agents<br/>at Each Node]
+        AG2[FSM-Driven<br/>Transitions]
+        AG3[Memory Context<br/>& State Management]
+        AG4[Lifecycle Hooks<br/>for Control]
+        AG1 --> Enables[Enables:<br/>• Order-independent completion<br/>• Interruptible workflows<br/>• Context preservation<br/>• Multi-agent coordination]
+    end
+    
+    style Break fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style Enables fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style TF1 fill:#ffcccc,stroke:#cc0000,stroke-width:2px
+    style AG1 fill:#d4edda,stroke:#28a745,stroke-width:2px
+```
+
+---
+
+## The Problem with ReAct Agents (Agentforce v1-v3)
+
+Traditional Agentforce agents use **ReAct pattern** (Reason + Act), which is **non-deterministic**:
 
 ```mermaid
 graph TD
@@ -35,7 +569,131 @@ graph TD
 
 ---
 
-## Use Case: Job Interview Agent (Adecco)
+## System 2 Agents: The Foundation of Agent Graph
+
+### What is a System 2 Agent?
+
+Inspired by Daniel Kahneman's *Thinking, Fast and Slow*:
+
+| Type | Characteristics | In AI |
+|------|----------------|-------|
+| **System 1** | Fast, intuitive, heuristic | ReAct agents, simple prompting |
+| **System 2** | Slow, deliberate, logical | Agent Graph nodes with FSM |
+
+**System 2 Agent Definition:**
+- Explicitly reasons step-by-step before acting
+- Maintains **structured internal state** (memory, plans, goals)
+- Uses **planning, verification, and reflection**
+- More computationally intensive but handles complex, multi-step reasoning
+- **Embedded in FSM** for state transitions and goal tracking
+
+```mermaid
+graph TB
+    subgraph "System 2 Agent Architecture"
+        Input[User Input] --> Memory[Memory Context<br/>• Conversation history<br/>• Goal state<br/>• Progress tracking]
+        Memory --> Planner[Planning Module<br/>• Break down goals<br/>• Identify dependencies<br/>• Order requirements]
+        Planner --> Reasoner[Reasoning Engine<br/>• Deliberate logic<br/>• Verification steps<br/>• Reflection]
+        Reasoner --> FSM[Finite State Machine<br/>• Current state<br/>• Completion conditions<br/>• Transition rules]
+        FSM --> Tools[Tool Execution<br/>• Actions<br/>• API calls<br/>• Knowledge retrieval]
+        Tools --> Memory
+        FSM --> Output[Controlled Output]
+    end
+    
+    style Memory fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+    style FSM fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style Planner fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+```
+
+### System 2 vs ReAct: Key Differences
+
+| Feature | System 2 Agent | ReAct Agent |
+|---------|---------------|-------------|
+| **Origin** | Cognitive psychology (deliberate reasoning) | Prompting technique for LLMs |
+| **Thinking Style** | Slow, structured, goal-oriented | Fast, reactive, step-by-step |
+| **Mechanisms** | Explicit planning, FSM, memory, verification | Chain-of-thought + tool calls |
+| **State Management** | Persistent across turns | Stateless (only in-context) |
+| **Goal Tracking** | Explicit FSM states | Implicit in prompts |
+| **Memory** | Structured memory buffers | Chat history only |
+| **Derailment Resistance** | High (FSM enforces goals) | Low (easily derailed) |
+| **Best For** | Complex, multi-turn, goal-driven tasks | Simple query-response interactions |
+
+---
+
+## Memory Context: The Key to State Persistence
+
+### Why Memory Matters
+
+Traditional ReAct agents lose context because they only have **chat history**. Agent Graph uses **structured memory buffers**:
+
+```mermaid
+graph LR
+    subgraph "ReAct Agent Memory"
+        R1[Chat History] --> R2[Messages in Context Window]
+        R2 -.->|Lost after window fills| R3[❌ No persistent state]
+    end
+    
+    subgraph "System 2 Agent Memory"
+        S1[Memory Context] --> S2[Short-term Memory<br/>Current conversation]
+        S1 --> S3[Working Memory<br/>Current goal state]
+        S1 --> S4[Long-term Memory<br/>Past conversations]
+        S1 --> S5[Episodic Memory<br/>Key facts & decisions]
+        
+        S2 --> Buffer[Memory Buffer<br/>FSM State Storage]
+        S3 --> Buffer
+        S4 --> Buffer
+        S5 --> Buffer
+    end
+    
+    style R3 fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+    style Buffer fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style S1 fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
+```
+
+### Memory Buffer Components
+
+**1. Conversation Context**
+```json
+{
+  "messages": [
+    {"role": "user", "content": "I need to reschedule"},
+    {"role": "assistant", "content": "I'll help with that"}
+  ],
+  "turn_count": 5,
+  "detected_locale": "en_US"
+}
+```
+
+**2. Goal State (FSM)**
+```json
+{
+  "current_goal": "complete_interview",
+  "questions_answered": ["Q1", "Q2"],
+  "questions_remaining": ["Q3", "Q4", "Q5"],
+  "completion_percentage": 40,
+  "can_transition": false
+}
+```
+
+**3. Working Memory**
+```json
+{
+  "customer_id": "003xx00001",
+  "order_number": "ORD-12345",
+  "delivery_date": "2025-08-15",
+  "issue_type": "late_delivery"
+}
+```
+
+**4. Episodic Memory**
+```json
+{
+  "key_decisions": [
+    "User confirmed address is correct",
+    "Preferred delivery window: 9am-12pm"
+  ],
+  "blockers": []
+}
+```
 
 ### Requirements
 
@@ -49,83 +707,118 @@ graph TD
 5. Agent can answer candidate questions BUT cannot be derailed from its mission
 6. Must maintain 100% agentic intelligence (not a phone menu)
 
-### Why Traditional Approaches Fail
+## How Memory Context Prevents Derailment
 
-**Approach 1: Pure Instructions**
-```json
-{
-  "instructions": "Ask these questions in order: 1) Can you carry 20kg? 2) Do you have cleaning experience? ..."
-}
-```
-❌ **Result**: User says "Can I get another question first?" → Agent complies and breaks order
+### Example Flow with Memory Buffer
 
-**Approach 2: More Forceful Instructions**
-```json
-{
-  "instructions": "YOU MUST ask questions in order. DO NOT skip questions. DO NOT allow users to change order..."
-}
+```mermaid
+sequenceDiagram
+    participant User
+    participant Interview as Interview Agent
+    participant Memory as Memory Buffer
+    participant FSM as Finite State Machine
+    participant Hook as Lifecycle Hook
+
+    User->>Interview: "Hi, I'm ready"
+    Interview->>Memory: Check state
+    Memory-->>Interview: {questions_answered: [], current_q: 1}
+    Interview->>FSM: What's my state?
+    FSM-->>Interview: State: Q1_REQUIRED
+    Hook->>Interview: Inject Q1 context
+    Interview->>User: "Can you carry 20kg? Provide examples."
+    
+    User->>Interview: "Can I get another question first?"
+    Interview->>Memory: Check if Q1 answered
+    Memory-->>Interview: {questions_answered: []}
+    Interview->>FSM: Can I skip to Q2?
+    FSM-->>Interview: NO - Q1 must be answered
+    Hook->>Interview: Enforce Q1 requirement
+    Interview->>User: "I need to confirm this first. Can you carry 20kg?"
+    
+    User->>Interview: "Yes, I carry heavy items daily at my job"
+    Interview->>Memory: Store Q1 answer
+    Memory-->>Memory: {questions_answered: ["Q1"], current_q: 2}
+    Interview->>FSM: Update state
+    FSM-->>Interview: State: Q1_COMPLETE → Q2_REQUIRED
+    Hook->>Interview: Inject Q2 context
+    Interview->>User: "Great! Do you have cleaning experience?"
+    
+    Note over Memory: Memory persists:<br/>• Goal progress<br/>• Cannot derail<br/>• Must complete Q1-Q5
 ```
-❌ **Result**: Still fails ~30% of the time. LLMs are helpful by nature and accommodate user requests.
+
+### Memory Buffer Stays On Track
+
+**Without Memory Buffer (ReAct Agent):**
+```
+User: "Can I get another question?"
+Agent: "Sure!" → Loses track of requirements
+```
+
+**With Memory Buffer (System 2 Agent):**
+```python
+# Memory buffer enforces goal
+memory_state = {
+    "interview_goal": "complete_all_5_questions",
+    "questions_answered": [1, 2],  # Only Q1, Q2 done
+    "current_question": 3,
+    "can_transition": False,  # Cannot leave until complete
+    "fsm_state": "Q3_REQUIRED"
+}
+
+# Hook checks memory before allowing any action
+if memory_state["questions_answered"].length < 5:
+    # Lock to current node
+    prevent_handoff()
+    inject_next_question_context()
+```
 
 ---
 
-## The Solution: Agent Graph + Lifecycle Hooks
+## The Solution: Guided Determinism = FSM + Memory + Hooks
 
-### Architecture Overview
+### Three-Layer Architecture
 
 ```mermaid
 graph TB
-    subgraph "Deterministic Control Layer"
-        Graph[Agent Graph<br/>Defines workflow structure]
-        Hooks[Lifecycle Hooks<br/>Enforces rules at runtime]
+    subgraph "Layer 1: Deterministic Control"
+        L1A[Agent Graph Structure<br/>Directed graph of nodes]
+        L1B[Finite State Machine<br/>State transitions & goals]
+        L1C[Memory Buffers<br/>Persistent context]
     end
     
-    subgraph "Agentic Intelligence Layer"
-        LLM[LLM Reasoning<br/>Handles conversation]
-        Tools[Dynamic Tool Usage<br/>Adapts to context]
+    subgraph "Layer 2: Steering Mechanisms"
+        L2A[Lifecycle Hooks<br/>Pre/post reasoning steps]
+        L2B[Context Injection<br/>Dynamic prompting]
+        L2C[Transition Guards<br/>FSM enforcement]
     end
     
-    Graph --> Hooks
-    Hooks --> LLM
-    LLM --> Tools
-    Hooks -.->|Controls & Steers| LLM
-    Hooks -.->|Prevents Derailment| Tools
-    
-    style Graph fill:#d4edda,stroke:#28a745,stroke-width:3px
-    style Hooks fill:#fff3cd,stroke:#ffc107,stroke-width:3px
-    style LLM fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-    style Tools fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-```
-
-### How Determinism Works with Stochastic Processes
-
-**Key Insight**: We don't make the LLM deterministic. We **steer** it deterministically.
-
-```mermaid
-graph LR
-    subgraph "Without Hooks: Pure Stochastic"
-        U1[User Input] --> L1[LLM]
-        L1 --> O1[Unpredictable Output]
-        O1 -.->|Can derail| Wrong[Wrong path taken]
+    subgraph "Layer 3: Agentic Intelligence"
+        L3A[System 2 Reasoning<br/>Deliberate planning]
+        L3B[Natural Language<br/>Conversational quality]
+        L3C[Tool Usage<br/>Dynamic actions]
     end
     
-    subgraph "With Hooks: Controlled Stochastic"
-        U2[User Input] --> H1[Pre-Hook:<br/>Inject Context]
-        H1 --> L2[LLM with<br/>Enhanced Context]
-        L2 --> H2[Post-Hook:<br/>Validate Output]
-        H2 --> Decision{Meets<br/>Requirements?}
-        Decision -->|Yes| O2[Approved Output]
-        Decision -->|No| Override[Override with<br/>Deterministic Response]
-    end
+    L1A --> L2A
+    L1B --> L2B
+    L1C --> L2C
+    L2A --> L3A
+    L2B --> L3B
+    L2C --> L3C
     
-    style U1 fill:#e8f4f8,stroke:#006699,stroke-width:1px
-    style L1 fill:#ffcccc,stroke:#cc0000,stroke-width:2px
-    style Wrong fill:#f8d7da,stroke:#dc3545,stroke-width:2px
-    style H1 fill:#fff3cd,stroke:#ffc107,stroke-width:2px
-    style H2 fill:#fff3cd,stroke:#ffc107,stroke-width:2px
-    style Decision fill:#fff3cd,stroke:#ffc107,stroke-width:2px
-    style Override fill:#d4edda,stroke:#28a745,stroke-width:2px
-    style O2 fill:#d4edda,stroke:#28a745,stroke-width:2px
+    L3A --> Output[Intelligent & Predictable Output]
+    L3B --> Output
+    L3C --> Output
+    
+    style L1A fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style L1B fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style L1C fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style L2A fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style L2B fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style L2C fill:#fff3cd,stroke:#ffc107,stroke-width:2px
+    style L3A fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style L3B fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style L3C fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style Output fill:#d4edda,stroke:#28a745,stroke-width:3px
 ```
 
 ---
@@ -189,20 +882,20 @@ graph TB
 
 ## Hook Implementation Examples
 
-### Hook 1: post_setup_agent - Inject Next Question
+### Hook 1: post_setup_agent - Memory-Aware Question Injection
 
-**Purpose**: Deterministically inject only the next unanswered question into the system prompt.
+**Purpose**: Use memory buffer to inject only the next unanswered question.
 
 ```python
-def post_setup_agent_hook(ctx, chat_history, agent_state):
+def post_setup_agent_hook(ctx, chat_history, agent_state, memory_buffer):
     """
     Runs after setup_agent step.
-    Deterministically injects the next question to ask.
+    Uses memory buffer to track progress and inject next question.
     """
-    # Check which questions have been answered
-    answered_questions = agent_state.get('answered_questions', [])
+    # Check memory buffer for progress
+    answered = memory_buffer.get('questions_answered', [])
     
-    # Define all interview questions
+    # Define interview questions
     questions = [
         "Are you able to carry 20kg? Please provide examples.",
         "Do you have cleaning experience in healthcare? Describe it.",
@@ -211,61 +904,96 @@ def post_setup_agent_hook(ctx, chat_history, agent_state):
         "Do you have reliable transportation?"
     ]
     
-    # Find next unanswered question
-    next_question_idx = len(answered_questions)
+    # Calculate next question from memory
+    next_idx = len(answered)
     
-    if next_question_idx < len(questions):
-        # DETERMINISTIC INJECTION: Add to end of chat history
-        # LLMs strongly honor recent instructions
+    if next_idx < len(questions):
+        # Store in memory buffer
+        memory_buffer['current_question'] = next_idx + 1
+        memory_buffer['total_questions'] = len(questions)
+        memory_buffer['goal_state'] = 'in_progress'
+        
+        # Inject into chat context (end of history for recency bias)
         system_message = f"""
+MEMORY STATE: Question {next_idx + 1} of {len(questions)}
 CRITICAL: You MUST ask this exact question next:
-"{questions[next_question_idx]}"
+"{questions[next_idx]}"
+
+MEMORY CONTEXT:
+- Answered so far: {len(answered)} questions
+- Remaining: {len(questions) - len(answered)} questions
+- Cannot proceed until this question is answered fully
 
 Do NOT accept yes/no answers. Require detailed responses.
-If the user tries to skip or asks other questions, politely redirect:
-"I understand, but first I need you to answer: [question]"
+If user tries to skip, refer to memory: "Our goal is to complete 
+all {len(questions)} questions. We're on question {next_idx + 1}."
 """
         chat_history.append({
             "role": "system",
             "content": system_message
         })
     
-    return ctx, chat_history, agent_state
+    return ctx, chat_history, agent_state, memory_buffer
 ```
 
-### Hook 2: pre_aggregate_tool_results - Control Handoff
+### Hook 2: pre_aggregate_tool_results - FSM-Driven Handoff
 
-**Purpose**: Check if all questions answered. If yes, force handoff to Qualifying Agent.
+**Purpose**: Check memory buffer and FSM state. Force handoff when complete.
 
 ```python
-def pre_aggregate_tool_results_hook(ctx, tool_results, agent_state):
+def pre_aggregate_tool_results_hook(ctx, tool_results, 
+                                   agent_state, memory_buffer):
     """
     Runs before aggregate_tool_results step.
-    Checks completion and forces deterministic handoff.
+    Checks memory buffer and FSM state for completion.
     """
-    answered_questions = agent_state.get('answered_questions', [])
-    total_questions = 5
+    # Check memory buffer
+    answered = memory_buffer.get('questions_answered', [])
+    total = memory_buffer.get('total_questions', 5)
     
-    # DETERMINISTIC CHECK
-    if len(answered_questions) >= total_questions:
-        # All questions answered - FORCE HANDOFF
-        agent_state['candidate_status'] = 'interview_complete'
+    # Update FSM state based on memory
+    completion_rate = len(answered) / total
+    memory_buffer['completion_percentage'] = completion_rate * 100
+    
+    # DETERMINISTIC FSM CHECK
+    if len(answered) >= total:
+        # Update memory: Goal complete
+        memory_buffer['goal_state'] = 'complete'
+        memory_buffer['interview_complete'] = True
         
-        # Force transition to Qualifying Agent
+        # Update FSM state
+        ctx['fsm_state'] = 'INTERVIEW_COMPLETE'
+        
+        # FORCE HANDOFF to next agent
         ctx['force_handoff'] = {
             'target_agent': 'qualifying_agent_16jSG000000XXXXX',
-            'reason': 'All interview questions completed'
+            'reason': 'Interview goal achieved',
+            'memory_context': {
+                'questions_answered': answered,
+                'candidate_responses': memory_buffer.get('responses', [])
+            }
         }
         
-        # Lock current agent - prevent returning
+        # Disable agent stickiness - allow transition
         ctx['agent_sticky'] = False
-        ctx['disable_handoff_from_current'] = True
+        
     else:
-        # NOT complete - LOCK to current agent
-        ctx['agent_sticky'] = True
+        # Goal NOT complete - update memory
+        memory_buffer['goal_state'] = 'in_progress'
+        remaining = total - len(answered)
+        
+        # LOCK to current agent via FSM
+        ctx['fsm_state'] = f'Q{len(answered) + 1}_REQUIRED'
+        ctx['agent_sticky'] = True  # Lock session
         ctx['disable_handoff'] = True  # Cannot escape
         
-    return ctx, tool_results, agent_state
+        # Store in memory why we can't transition
+        memory_buffer['transition_blocker'] = {
+            'reason': 'incomplete_interview',
+            'remaining_questions': remaining
+        }
+        
+    return ctx, tool_results, agent_state, memory_buffer
 ```
 
 ---
