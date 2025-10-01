@@ -108,32 +108,32 @@ sequenceDiagram
 
 ```mermaid
 graph TB
-    Input[User Input:<br/>"Can I skip this question?"] --> Memory[Memory Buffer Check]
+    Input["User Input: Can I skip this question?"] --> Memory[Memory Buffer Check]
     
-    Memory --> FSMCheck{FSM State Check:<br/>Current goal complete?}
+    Memory --> FSMCheck{"FSM State Check: Current goal complete?"}
     
-    FSMCheck -->|No - Q3 not answered| Guard[Deterministic Guardrails:<br/>• Goal: Complete Q3<br/>• State: Q3_REQUIRED<br/>• Lock: Active]
+    FSMCheck -->|No - Q3 not answered| Guard["Deterministic Guardrails: Goal Complete Q3, State Q3_REQUIRED, Lock Active"]
     
-    Guard --> PreHook[PRE-REASONING HOOK:<br/>Inject Q3 context]
+    Guard --> PreHook["PRE-REASONING HOOK: Inject Q3 context"]
     
-    PreHook --> Stochastic[Stochastic Layer:<br/>System 2 LLM Reasoning]
+    PreHook --> Stochastic["Stochastic Layer: System 2 LLM Reasoning"]
     
-    Stochastic --> Generate[Generate Response:<br/>Natural language<br/>Empathetic tone<br/>Redirects to Q3]
+    Stochastic --> Generate["Generate Response: Natural language, Empathetic tone, Redirects to Q3"]
     
-    Generate --> PostHook[POST-REASONING HOOK:<br/>Verify Q3 addressed]
+    Generate --> PostHook["POST-REASONING HOOK: Verify Q3 addressed"]
     
     PostHook --> Validate{Response Valid?}
     
-    Validate -->|No| Override[Override with<br/>deterministic response]
-    Validate -->|Yes| UpdateMem[Update Memory:<br/>Q3 still pending]
+    Validate -->|No| Override["Override with deterministic response"]
+    Validate -->|Yes| UpdateMem["Update Memory: Q3 still pending"]
     
-    UpdateMem --> UpdateFSM[Update FSM:<br/>State: Q3_REQUIRED]
+    UpdateMem --> UpdateFSM["Update FSM: State Q3_REQUIRED"]
     
-    UpdateFSM --> Output[Output to User:<br/>"I understand, but I need<br/>to complete Q3 first..."]
+    UpdateFSM --> Output["Output to User: I understand, but I need to complete Q3 first"]
     
     Output --> Loop{More turns?}
     Loop -->|Yes| Input
-    Loop -->|No - Q3 answered| Transition[Transition:<br/>FSM: Q3_COMPLETE → Q4_REQUIRED]
+    Loop -->|No - Q3 answered| Transition["Transition: FSM Q3_COMPLETE to Q4_REQUIRED"]
     
     style Memory fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
     style Guard fill:#d4edda,stroke:#28a745,stroke-width:3px
