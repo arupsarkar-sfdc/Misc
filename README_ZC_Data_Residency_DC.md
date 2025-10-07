@@ -403,8 +403,6 @@ What syncs from South America to Spain:
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Data that traveled to Spain:** ~2KB (50 rows of aggregated statistics)  
-**Data that stayed in origin countries:** ~500GB (millions of patient records)
 
 ---
 
@@ -538,17 +536,6 @@ For Brazil, Ecuador, Colombia, Chile, Peru (repeat for each):
 
 ---
 
-## 💡 Final Analogy
-
-Think of Data Cloud Zero Copy like **Google Search**:
-
-- Google doesn't copy every website to its servers
-- Websites stay on their original servers worldwide
-- Google maintains an **index** (metadata) of what's on each site
-- When you search, Google sends queries to relevant sites
-- Results aggregate back to you
-- Original web pages never move
-
 ### Your Architecture:
 - **Patient data** = websites (stay where they are)
 - **Data Cloud** = Google's index (knows what's where)
@@ -596,7 +583,7 @@ You get unified analytics across all countries while every byte of patient data 
 ## 📝 Document Information
 
 **Version:** 1.0  
-**Last Updated:** January 2025  
+**Last Updated:** October 2025  
 **Author:** Salesforce Data Cloud Technical Architecture Team  
 **Use Case:** Multi-Country Patient Data with Data Residency Compliance
 
