@@ -201,7 +201,7 @@ Each South American country has:
 
 ---
 
-### Layer 2: Data Cloud Connectors (The Zero Copy Magic)
+### Layer 2: Data Cloud Connectors (The Zero Copy)
 
 In each country, a **Data Cloud Connector** is installed. This connector:
 
@@ -558,7 +558,7 @@ Think of Data Cloud Zero Copy like **Google Search**:
 
 ---
 
-## ✅ Summary: Problem Solved
+## ✅ Summary:
 
 ### Your Challenge
 Collect patient data from 5 countries without Hyperforce, analyze from Spain with Hyperforce, respect data residency laws.
