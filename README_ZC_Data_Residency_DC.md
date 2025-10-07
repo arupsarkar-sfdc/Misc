@@ -37,97 +37,105 @@ Salesforce Data Cloud's **Zero Copy** architecture allows data to stay exactly w
 ```mermaid
 graph TB
     subgraph Legend["🔑 LEGEND"]
-        L1["🟦 Data Source (Patient Data Stays Here)"]
-        L2["🟨 Salesforce Hyperforce (Where Available)"]
-        L3["🟩 Data Cloud Zero Copy (Metadata Only)"]
-        L4["🟥 Data Flow (What Moves Where)"]
+        L1["🟦 Data Source - Patient Data Storage"]
+        L2["🟨 Salesforce Hyperforce & Data Cloud"]
+        L3["🟩 Connection Configuration - Logical Only"]
+        L4["🟥 Data Flow Direction"]
     end
 
-    subgraph Brazil["🇧🇷 BRAZIL - No Hyperforce Instance"]
+    subgraph Brazil["🇧🇷 BRAZIL - No Hyperforce Needed"]
         BR_VENDOR["Third-Party Patient<br/>Services Vendor"]
-        BR_SF["Snowflake Brazil<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)"]
-        BR_DC["Data Cloud Connector<br/>📋 Metadata Only<br/>(Schema, Indexes, Pointers)"]
+        BR_SF["Snowflake Brazil<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)<br/>Accessible via network"]
         
         BR_VENDOR -->|"CSV, REST API<br/>Patient Records"| BR_SF
-        BR_SF -.->|"Zero Copy<br/>NO DATA TRANSFER<br/>Only Metadata"| BR_DC
     end
 
-    subgraph Ecuador["🇪🇨 ECUADOR - No Hyperforce Instance"]
+    subgraph Ecuador["🇪🇨 ECUADOR - No Hyperforce Needed"]
         EC_VENDOR["Third-Party Patient<br/>Services Vendor"]
-        EC_SF["Snowflake Ecuador<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)"]
-        EC_DC["Data Cloud Connector<br/>📋 Metadata Only<br/>(Schema, Indexes, Pointers)"]
+        EC_SF["Snowflake Ecuador<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)<br/>Accessible via network"]
         
         EC_VENDOR -->|"Streaming Data<br/>Patient Records"| EC_SF
-        EC_SF -.->|"Zero Copy<br/>NO DATA TRANSFER<br/>Only Metadata"| EC_DC
     end
 
-    subgraph Colombia["🇨🇴 COLOMBIA - No Hyperforce Instance"]
+    subgraph Colombia["🇨🇴 COLOMBIA - No Hyperforce Needed"]
         CO_VENDOR["Third-Party Patient<br/>Services Vendor"]
-        CO_SF["Snowflake Colombia<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)"]
-        CO_DC["Data Cloud Connector<br/>📋 Metadata Only<br/>(Schema, Indexes, Pointers)"]
+        CO_SF["Snowflake Colombia<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)<br/>Accessible via network"]
         
         CO_VENDOR -->|"SFTP Flat Files<br/>Patient Records"| CO_SF
-        CO_SF -.->|"Zero Copy<br/>NO DATA TRANSFER<br/>Only Metadata"| CO_DC
     end
 
-    subgraph Chile["🇨🇱 CHILE - No Hyperforce Instance"]
+    subgraph Chile["🇨🇱 CHILE - No Hyperforce Needed"]
         CL_VENDOR["Third-Party Patient<br/>Services Vendor"]
-        CL_SF["Snowflake Chile<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)"]
-        CL_DC["Data Cloud Connector<br/>📋 Metadata Only<br/>(Schema, Indexes, Pointers)"]
+        CL_SF["Snowflake Chile<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)<br/>Accessible via network"]
         
         CL_VENDOR -->|"REST API<br/>Patient Records"| CL_SF
-        CL_SF -.->|"Zero Copy<br/>NO DATA TRANSFER<br/>Only Metadata"| CL_DC
     end
 
-    subgraph Peru["🇵🇪 PERU - No Hyperforce Instance"]
+    subgraph Peru["🇵🇪 PERU - No Hyperforce Needed"]
         PE_VENDOR["Third-Party Patient<br/>Services Vendor"]
-        PE_SF["Snowflake Peru<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)"]
-        PE_DC["Data Cloud Connector<br/>📋 Metadata Only<br/>(Schema, Indexes, Pointers)"]
+        PE_SF["Snowflake Peru<br/>🔵 PATIENT DATA LIVES HERE<br/>(Never Moves)<br/>Accessible via network"]
         
         PE_VENDOR -->|"CSV Files<br/>Patient Records"| PE_SF
-        PE_SF -.->|"Zero Copy<br/>NO DATA TRANSFER<br/>Only Metadata"| PE_DC
     end
 
-    subgraph Spain["🇪🇸 SPAIN - HAS Hyperforce Instance"]
-        SPAIN_HF["Salesforce Hyperforce Spain<br/>⚡ Data Cloud Instance<br/>🟡 CONTROL PLANE"]
-        SPAIN_META["Unified Metadata Layer<br/>📊 Virtual View of ALL Countries<br/>(No Actual Patient Data)"]
+    subgraph Spain["🇪🇸 SPAIN - Salesforce Hyperforce Instance"]
+        SPAIN_HF["Salesforce Hyperforce Spain<br/>⚡ Data Cloud Instance<br/>🟡 THE ONLY INSTANCE"]
+        
+        subgraph Connectors["Data Cloud Connections (Inside Spain Instance)"]
+            BR_CONN["🟢 Connection Config #1<br/>Target: Brazil Snowflake<br/>Type: Zero Copy Federation"]
+            EC_CONN["🟢 Connection Config #2<br/>Target: Ecuador Snowflake<br/>Type: Zero Copy Federation"]
+            CO_CONN["🟢 Connection Config #3<br/>Target: Colombia Snowflake<br/>Type: Zero Copy Federation"]
+            CL_CONN["🟢 Connection Config #4<br/>Target: Chile Snowflake<br/>Type: Zero Copy Federation"]
+            PE_CONN["🟢 Connection Config #5<br/>Target: Peru Snowflake<br/>Type: Zero Copy Federation"]
+        end
+        
+        SPAIN_META["Unified Metadata Catalog<br/>📊 Virtual Schema Across All Countries<br/>(No Actual Patient Data)"]
         SPAIN_TEAM["International Patient<br/>Services Team<br/>👥 Analysts in Spain"]
         
-        SPAIN_HF --> SPAIN_META
+        SPAIN_HF --> Connectors
+        Connectors --> SPAIN_META
         SPAIN_META --> SPAIN_TEAM
     end
 
-    BR_DC -.->|"Metadata Sync<br/>🔐 Encrypted Channel"| SPAIN_HF
-    EC_DC -.->|"Metadata Sync<br/>🔐 Encrypted Channel"| SPAIN_HF
-    CO_DC -.->|"Metadata Sync<br/>🔐 Encrypted Channel"| SPAIN_HF
-    CL_DC -.->|"Metadata Sync<br/>🔐 Encrypted Channel"| SPAIN_HF
-    PE_DC -.->|"Metadata Sync<br/>🔐 Encrypted Channel"| SPAIN_HF
+    BR_CONN -.->|"Secure Network Connection<br/>Query Execution Only<br/>Results Return"| BR_SF
+    EC_CONN -.->|"Secure Network Connection<br/>Query Execution Only<br/>Results Return"| EC_SF
+    CO_CONN -.->|"Secure Network Connection<br/>Query Execution Only<br/>Results Return"| CO_SF
+    CL_CONN -.->|"Secure Network Connection<br/>Query Execution Only<br/>Results Return"| CL_SF
+    PE_CONN -.->|"Secure Network Connection<br/>Query Execution Only<br/>Results Return"| PE_SF
 
-    subgraph Analysis["📊 HOW QUERIES WORK"]
-        QUERY["Analyst in Spain runs query:<br/>'Show all patients from South America<br/>with condition X'"]
-        EXECUTE["Data Cloud EXECUTES query<br/>IN EACH COUNTRY'S Snowflake<br/>(Patient data never leaves origin)"]
-        AGGREGATE["Only AGGREGATED RESULTS<br/>return to Spain<br/>(Summary statistics, counts, trends)"]
+    subgraph QueryFlow["📊 HOW FEDERATED QUERIES WORK"]
+        QUERY["Spain Analyst Query:<br/>'Show all South American<br/>patients with diabetes'"]
+        PARSE["Query Parser in Spain<br/>Identifies needed data sources<br/>(All 5 countries)"]
+        DISTRIBUTE["Query Distribution Engine<br/>Creates 5 parallel queries"]
+        EXECUTE["SPAIN CONNECTS TO EACH<br/>SNOWFLAKE REMOTELY<br/>Executes query WHERE data lives"]
+        AGGREGATE["Result Aggregation<br/>Combines responses<br/>Returns to analyst"]
         
-        QUERY --> EXECUTE
+        QUERY --> PARSE
+        PARSE --> DISTRIBUTE
+        DISTRIBUTE --> EXECUTE
         EXECUTE --> AGGREGATE
     end
 
-    SPAIN_TEAM -->|"Query Request"| QUERY
-    AGGREGATE -->|"Results Only"| SPAIN_TEAM
+    SPAIN_TEAM -->|"Submits Query"| QUERY
+    AGGREGATE -->|"Returns Results"| SPAIN_TEAM
 
-    EXECUTE -.->|"Query executed locally"| BR_SF
-    EXECUTE -.->|"Query executed locally"| EC_SF
-    EXECUTE -.->|"Query executed locally"| CO_SF
-    EXECUTE -.->|"Query executed locally"| CL_SF
-    EXECUTE -.->|"Query executed locally"| PE_SF
+    EXECUTE -.->|"Remote query execution"| BR_SF
+    EXECUTE -.->|"Remote query execution"| EC_SF
+    EXECUTE -.->|"Remote query execution"| CO_SF
+    EXECUTE -.->|"Remote query execution"| CL_SF
+    EXECUTE -.->|"Remote query execution"| PE_SF
 
-    subgraph KeyConcepts["💡 KEY CONCEPTS EXPLAINED"]
-        K1["✅ ZERO COPY = Patient data NEVER moves<br/>from origin country's Snowflake"]
-        K2["✅ DATA RESIDENCY = Data stays in<br/>Brazil, Ecuador, Colombia, Chile, Peru"]
-        K3["✅ HYPERFORCE NOT REQUIRED = Countries<br/>without Hyperforce can still participate"]
-        K4["✅ METADATA ONLY = Only table structures,<br/>schemas, and pointers sync to Spain"]
-        K5["✅ FEDERATED QUERIES = Queries execute<br/>WHERE data lives, results aggregate"]
-        K6["✅ COMPLIANCE = Each country's data<br/>complies with local regulations"]
+    subgraph KeyConcepts["💡 CRITICAL ARCHITECTURE POINTS"]
+        K1["✅ ONE Data Cloud Instance (Spain Only)<br/>Not 6 instances, just ONE"]
+        K2["✅ FIVE Connection Configs (Inside Spain)<br/>Stored as connection strings in Spain"]
+        K3["✅ ZERO Software in South America<br/>No agents, no connectors, no deployment"]
+        K4["✅ Direct Network Connections<br/>Spain connects TO Snowflakes remotely"]
+        K5["✅ Federated Query Execution<br/>Queries execute WHERE data lives"]
+        K6["✅ Data NEVER Moves<br/>Only metadata catalog + query results"]
+    end
+
+    subgraph NetworkReqs["🌐 NETWORK REQUIREMENTS"]
+        N1["Each country's Snowflake must:<br/>• Allow inbound connections from Spain<br/>• Whitelist Spain Data Cloud IP ranges<br/>• Enable secure authentication (OAuth/Key)"]
     end
 
     style BR_SF fill:#4169E1,color:#fff
@@ -137,17 +145,19 @@ graph TB
     style PE_SF fill:#4169E1,color:#fff
     
     style SPAIN_HF fill:#FFD700,color:#000
-    style SPAIN_META fill:#90EE90,color:#000
+    style SPAIN_META fill:#FFA500,color:#000
     
-    style BR_DC fill:#90EE90,color:#000
-    style EC_DC fill:#90EE90,color:#000
-    style CO_DC fill:#90EE90,color:#000
-    style CL_DC fill:#90EE90,color:#000
-    style PE_DC fill:#90EE90,color:#000
+    style BR_CONN fill:#90EE90,color:#000
+    style EC_CONN fill:#90EE90,color:#000
+    style CO_CONN fill:#90EE90,color:#000
+    style CL_CONN fill:#90EE90,color:#000
+    style PE_CONN fill:#90EE90,color:#000
     
+    style Connectors fill:#f0fff0,stroke:#32CD32,stroke-width:3px
     style Legend fill:#f0f0f0,stroke:#333
     style KeyConcepts fill:#fff4e6,stroke:#ff9800,stroke-width:3px
-    style Analysis fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    style QueryFlow fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    style NetworkReqs fill:#fff3e0,stroke:#ff6f00,stroke-width:2px
 ```
 
 ### Diagram Color Key
