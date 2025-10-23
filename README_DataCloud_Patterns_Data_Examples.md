@@ -97,7 +97,7 @@ Data Streams (Batch Service, Marketing S3, Streaming Ingestion API)
 
 ### Diagram
 
-```
+```mermaid
 graph LR
     A[Snowflake<br/>customer_id, full_name] -->|Batch Service| B[Adapter]
     C[Marketing Cloud<br/>ContactId, Name] -->|Marketing S3| B
@@ -181,7 +181,7 @@ Filter: Last 3 Months
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     User[Business User] -->|Requests<br/>'Sales Velocity'| Facade[Semantic Layer FACADE]
     
@@ -270,7 +270,7 @@ Risk: No monitoring, no cost control, no audit
 
 **With Einstein Trust Layer Proxy:**
 
-```
+```mermaid
 sequenceDiagram
     participant Agent as Agentforce Agent
     participant Proxy as Einstein Trust Layer<br/>(PROXY)
@@ -417,7 +417,7 @@ Total: 4 integrations = O(n) complexity
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     subgraph "Without Mediator - Chaotic"
         SO1[Sales Org] -.->|Integration| SV1[Service Org]
@@ -614,7 +614,7 @@ Reconciliation Decision: Same account
 
 ### Diagram
 
-```
+```mermaid
 sequenceDiagram
     participant DS as Data Streams<br/>(SUBJECT)
     participant DC as Data Cloud
@@ -800,7 +800,7 @@ Weekly: Batch
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     Context[Identity Resolution<br/>CONTEXT] -->|Uses| Strategy[Strategy Interface]
     
@@ -1069,7 +1069,7 @@ Record 2 vs Record 3:
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     Account[Account<br/>COMPOSITE] --> Contact1[Contact 1<br/>LEAF]
     Account --> Contact2[Contact 2<br/>LEAF]
@@ -1404,7 +1404,7 @@ Answer: Case 500XX001 - "Cannot access dashboard"
 
 ### Solution: Unified Profile (SINGLETON)
 
-```
+```mermaid
 graph TB
     R1[Sales Org: 003XX001<br/>Jane Austin] -->|Identity Resolution| UP
     R2[Service Org: 003YY002<br/>Jan Austin] -->|Identity Resolution| UP
@@ -1610,7 +1610,7 @@ Local IDs (003XX001, 003YY002, SUB-789) → Cross-referenced
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     Client[Data Ingestion Request] -->|Request Type| Factory[Data Stream Factory]
     
@@ -1978,7 +1978,7 @@ Just requests: "Create stream for X"
 
 ### Diagram
 
-```
+```mermaid
 graph LR
     Base[Base Transaction Data<br/>from Snowflake] -->|+| D1[CRM Enrichment<br/>DECORATOR 1]
     D1 -->|+| D2[Calculated Insights<br/>DECORATOR 2]
@@ -2317,7 +2317,7 @@ Can choose which decorators to apply:
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     subgraph "Abstraction Layer"
         SL[Semantic Layer<br/>ABSTRACTION]
@@ -2561,7 +2561,7 @@ GROUP BY IndividualId, Industry__c, Region__c;
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     Start[Data Ingestion Pipeline<br/>TEMPLATE METHOD] -->|Step 1| Extract[Extract<br/>abstract method]
     Extract -->|Step 2| Validate[Validate<br/>hook method]
@@ -3024,7 +3024,7 @@ extract_task >> validate_task >> transform_task >> enrich_task >> load_task >> l
 
 ### Diagram
 
-```
+```mermaid
 graph LR
     Input[Incoming Data Record] --> H1[Ataccama<br/>Data Quality<br/>HANDLER 1]
     H1 -->|Pass/Fail| H2[Monte Carlo<br/>Anomaly Detection<br/>HANDLER 2]
@@ -3369,7 +3369,7 @@ class LegoDataQualityHandler:
 
 ### Chain Execution Flow
 
-```
+```mermaid
 sequenceDiagram
     participant Input as Incoming Record
     participant H1 as Ataccama
@@ -3466,7 +3466,7 @@ sequenceDiagram
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     Invoker[Data Actions<br/>INVOKER] -->|Execute| CMD1[SendEmailCommand]
     Invoker -->|Execute| CMD2[TriggerJourneyCommand]
@@ -4002,7 +4002,7 @@ results = invoker.execute_all(transaction)
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     App[Application Layer<br/>Segmentation, Calculated Insights] -->|Uses| Repo[Repository Interface]
     
@@ -4432,7 +4432,7 @@ Only swap repository implementation
 
 ### Diagram
 
-```
+```mermaid
 graph TB
     Originator[Data Record<br/>ORIGINATOR] -->|Create| Memento[Memento<br/>Data Lineage Record]
     Memento -->|Store| Caretaker[Caretaker<br/>Lineage Storage]
