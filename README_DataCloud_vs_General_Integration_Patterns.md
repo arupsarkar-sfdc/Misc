@@ -22,12 +22,18 @@ This document answers this question with real data examples, pattern analysis, a
 
 ### Pattern 1: API Integration (Synchronous)
 
+**<span style="color:red;">Supports 4 out of 15 Design Patterns (27%)</span>**
+
 #### **What It Supports:**
 
 **Design Patterns:**
+
+**Structural:** *(3 out of 6 patterns)*
 - ✅ **Adapter Pattern** - Transform requests/responses between systems
 - ✅ **Proxy Pattern** - API Gateway acts as proxy
 - ✅ **Facade Pattern** - Simplify complex API interactions
+
+**Behavioral:** *(1 out of 7 patterns)*
 - ✅ **Command Pattern** - Execute remote commands via API
 
 **Capabilities:**
@@ -75,13 +81,19 @@ Time: 1.2 seconds
 
 ### Pattern 2: Batch/Cron Integration (Scheduled)
 
+**<span style="color:red;">Supports 4 out of 15 Design Patterns (27%)</span>**
+
 #### **What It Supports:**
 
 **Design Patterns:**
+
+**Behavioral:** *(3 out of 7 patterns)*
 - ✅ **Template Method Pattern** - Standard ETL workflow
-- ✅ **Factory Pattern** - Create different batch job types
 - ✅ **Strategy Pattern** - Different batch processing strategies
 - ✅ **Chain of Responsibility Pattern** - Sequential data quality checks
+
+**Creational:** *(1 out of 2 patterns)*
+- ✅ **Factory Pattern** - Create different batch job types
 
 **Capabilities:**
 - Bulk data movement
@@ -152,9 +164,13 @@ Latency: Up to 24 hours (data from yesterday available next day)
 
 ### Pattern 3: Kafka Streaming (Real-Time)
 
+**<span style="color:red;">Supports 4 out of 15 Design Patterns (27%)</span>**
+
 #### **What It Supports:**
 
 **Design Patterns:**
+
+**Behavioral:** *(4 out of 7 patterns)*
 - ✅ **Observer Pattern** - Event-driven, pub-sub model
 - ✅ **Mediator Pattern** - Kafka acts as central event bus
 - ✅ **Command Pattern** - Events as commands
