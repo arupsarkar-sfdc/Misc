@@ -7,12 +7,12 @@
 
 ## 📖 **Table of Contents**
 
-1. [Executive Summary](#executive-summary)
-2. [Salesforce Private Connect Architecture](#salesforce-private-connect-architecture)
-3. [AWS Transit Gateway Architecture](#aws-transit-gateway-architecture)
-4. [Comparative Analysis](#comparative-analysis)
-5. [Security Models](#security-models)
-6. [Use Case Recommendations](#use-case-recommendations)
+1. [🎯 Executive Summary](#-executive-summary)
+2. [🔐 Salesforce Private Connect Architecture](#-salesforce-private-connect-architecture)
+3. [🌐 AWS Transit Gateway Architecture](#-aws-transit-gateway-architecture)
+4. [⚖️ Comparative Analysis](#️-comparative-analysis)
+5. [🛡️ Security Models Comparison](#️-security-models-comparison)
+6. [🎯 Use Case Recommendations](#-use-case-recommendations)
 
 ---
 
