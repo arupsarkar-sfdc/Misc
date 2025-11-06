@@ -122,7 +122,7 @@ flowchart TB
 
 **🔐 Authentication Flow (Parallel Process)**
 - **Step 3a → 3b**: Authentication tokens are generated in parallel with connection establishment
-- **OIDC Integration**: Provides seamless single sign-on experience with zero static credential management
+- **OIDC Integration**: Provides standards-based single sign-on with zero static credential management
 - **Token Lifecycle**: Automatic token rotation ensures continuous security without manual intervention
 
 ### 🔍 **Key Components Deep Dive**
@@ -285,7 +285,7 @@ flowchart TB
 |------|-----------|-------------|-------------------|
 | **9** | **Hybrid Gateways** | On-premises connectivity establishment | VPN and Direct Connect gateways provide secure, redundant connectivity options with different performance and cost characteristics |
 | **10** | **On-Premises Integration** | Corporate network bridge | On-premises networks connect through either VPN (encrypted over internet) or Direct Connect (dedicated private connection) with route propagation to TGW |
-| **11** | **Branch Office Connectivity** | Distributed location access | Branch offices connect through corporate network infrastructure, enabling seamless access to cloud resources via established hybrid connectivity |
+| **11** | **Branch Office Connectivity** | Distributed location access | Branch offices connect through corporate network infrastructure, enabling direct access to cloud resources via established hybrid connectivity |
 
 **⚠️ Cross-Environment Controls**
 - **Controlled Access**: Limited, policy-based communication between production and development environments
@@ -383,7 +383,7 @@ flowchart LR
 | **6** | **Data Warehouse Execution** | Query processing and result delivery | Target warehouse (Snowflake/Redshift/Databricks) executes query and returns results through the secured Private Connect channel |
 | **A** | **Identity Provider Authentication** | Salesforce-managed identity services | IDP validates user identity, applies role-based access controls, and initiates secure authentication flow |
 | **B** | **Token Generation** | Dynamic credential creation | System generates short-lived JWT tokens with specific audience claims, eliminating static credential management |
-| **C** | **OIDC Authentication** | Standards-based secure access | OIDC provider validates tokens, establishes trust relationships, and enables seamless single sign-on experience |
+| **C** | **OIDC Authentication** | Standards-based secure access | OIDC provider validates tokens, establishes trust relationships, and enables standards-based single sign-on |
 
 **🌐 AWS Transit Gateway Flow (Steps 1-6 + Hybrid 7-10)**
 
@@ -395,7 +395,7 @@ flowchart LR
 | **4** | **Route Table Processing** | Path determination and policy application | System evaluates destination CIDR blocks, applies route propagation rules, and selects optimal next-hop based on routing policies |
 | **5** | **Target Attachment Selection** | Destination resolution and forwarding | TGW selects appropriate target attachment (VPC, VPN, or Direct Connect) based on routing table evaluation and policy rules |
 | **6** | **Traffic Delivery** | Final destination and response handling | Traffic reaches destination VPC or network, application processes request, and response follows reverse path back to source |
-| **7** | **On-Premises Network Integration** | Hybrid cloud connectivity | Corporate networks connect to AWS through VPN or Direct Connect, enabling seamless hybrid cloud operations |
+| **7** | **On-Premises Network Integration** | Hybrid cloud connectivity | Corporate networks connect to AWS through VPN or Direct Connect, enabling integrated hybrid cloud operations |
 | **8** | **Hybrid Connectivity Bridge** | Secure tunnel or dedicated connection | VPN provides encrypted connectivity over internet, while Direct Connect offers dedicated, high-bandwidth private connection |
 | **9** | **Multi-VPC Coordination** | Distributed workload management | Multiple VPCs with different functions coordinate through TGW, enabling complex application architectures |
 | **10** | **Centralized Policy Enforcement** | Routing policy and security controls | TGW applies centralized routing policies, security controls, and compliance requirements across entire network topology |
@@ -507,7 +507,7 @@ flowchart TB
 | **2** | **Security Group Controls** | Stateful firewall protection | Instance-level security groups provide granular port and protocol controls with automatic state tracking for return traffic |
 | **3** | **Network ACL Filtering** | Subnet-level access control | Stateless network ACLs provide additional layer of protection at subnet boundaries with explicit allow/deny rules |
 | **4** | **Centralized Firewall** | Advanced threat protection | AWS Network Firewall or third-party solutions provide deep packet inspection, intrusion detection, and advanced threat protection |
-| **5** | **Traffic Inspection VPC** | Deep packet analysis | Dedicated inspection VPC enables sophisticated traffic analysis, malware detection, and compliance monitoring |
+| **5** | **Traffic Inspection VPC** | Deep packet analysis | Dedicated inspection VPC enables comprehensive traffic analysis, malware detection, and compliance monitoring |
 | **6** | **VPC Flow Logs** | Comprehensive network monitoring | Detailed logging of all network traffic enables security analysis, troubleshooting, and compliance reporting |
 
 **🤝 Common Security Benefits (Shared Benefits 1-4)**
@@ -570,7 +570,7 @@ Solution: Private Connect with multi-warehouse targets
 
 #### ✅ **Ideal Scenarios**
 - **🏗️ Multi-VPC Architecture**: Need to connect multiple VPCs across accounts/regions
-- **🌉 Hybrid Connectivity**: Require seamless on-premises to cloud networking
+- **🌉 Hybrid Connectivity**: Require direct on-premises to cloud networking
 - **🛡️ Centralized Security**: Want hub-based security inspection and policy enforcement
 - **📈 Complex Routing**: Need advanced routing policies and traffic segmentation
 

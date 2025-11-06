@@ -253,7 +253,7 @@ The Spain Hyperforce is essentially the **"brain"** that knows where all the dat
 
 ### Layer 4: How Queries Actually Work (Federated Query Execution)
 
-When your International Patient Services team in Spain runs a query, here's the magic:
+When your International Patient Services team in Spain runs a query, here's the technical process:
 
 #### Example Query:
 ```sql
@@ -505,7 +505,7 @@ For Brazil, Ecuador, Colombia, Chile, Peru (repeat for each):
 **A:** Patient data NEVER leaves its origin country. When Spain queries Brazilian patient data, the query travels TO Brazil, executes in Brazil's Snowflake, and only aggregated results return to Spain. The individual patient records never cross borders.
 
 ### Q: "Patient data will not be collected by SF CRM"
-**A:** Perfect! That's not a problem. Your third-party vendors send data directly to each country's Snowflake (via CSV, API, SFTP, Streaming). Data Cloud then provides a virtual layer on top of Snowflake, regardless of how data arrived there.
+**A:** Correct! That's not a problem. Your third-party vendors send data directly to each country's Snowflake (via CSV, API, SFTP, Streaming). Data Cloud then provides a virtual layer on top of Snowflake, regardless of how data arrived there.
 
 ### Q: "Aggregated data must be available for analysis in Spain"
 **A:** This is exactly what Zero Copy enables. Spain's team runs queries/reports, Data Cloud federates the query execution to each country, aggregates results, and presents unified analytics—all while keeping raw patient data in origin countries.

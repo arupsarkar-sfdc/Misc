@@ -5,7 +5,7 @@
 | **Task Completion** | ❌ Unpredictable | ✅ Guaranteed | ✅ Guaranteed |
 | **Conversation Quality** | ✅ Natural | ❌ Rigid | ✅ Natural |
 | **Memory Persistence** | ❌ Chat history only | ✅ State variables | ✅ Structured buffers |
-| **Derailment Resistance** | ❌ Low | ✅ Perfect | ✅ High |
+| **Derailment Resistance** | ❌ Low | ✅ Deterministic | ✅ High |
 | **Adaptability** | ✅ High | ❌ None | ✅ High |
 | **Goal Tracking** | ❌ Implicit | ✅ Explicit | ✅ Explicit FSM |
 | **Interruptibility** | ❌ Loses context | ❌ Breaks flow | ✅ Recoverable |
@@ -143,7 +143,7 @@ graph TB
     style UpdateFSM fill:#d4edda,stroke:#28a745,stroke-width:2px
 ```
 
-### The Magic: Recency Bias + Memory + FSM
+### Technical Implementation: Recency Bias + Memory + FSM
 
 **Research Foundation** (Liu et al., "Lost in the Middle", ICLR 2023):
 

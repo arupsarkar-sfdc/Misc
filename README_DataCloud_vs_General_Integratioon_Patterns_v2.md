@@ -11,7 +11,7 @@ This document answers this question with real data examples, pattern analysis, a
 ## Table of Contents
 1. [Traditional Integration Patterns: What They Support](#traditional-integration-patterns)
 2. [The Activation Problem](#the-activation-problem)
-3. [Data Cloud Design Patterns: Superior Stack](#data-cloud-superior-stack)
+3. [Data Cloud Design Patterns: Technical Stack](#data-cloud-technical-stack)
 4. [Real-World Comparison](#real-world-comparison)
 5. [Pattern Coverage Matrix](#pattern-coverage-matrix)
 6. [The Business Case](#the-business-case)
@@ -1852,7 +1852,7 @@ for message in consumer:
 
 ---
 
-## Data Cloud Superior Stack
+## Data Cloud Technical Stack
 
 ### How Data Cloud Solves the Activation Problem
 
@@ -2681,7 +2681,7 @@ Event 3 - Form Submit:
   "lastName": "Austin"
 }
 
-// HERE'S WHERE SUB-SECOND MAGIC HAPPENS:
+// HERE'S WHERE SUB-SECOND PROCESSING OCCURS:
 
 // Millisecond-by-millisecond breakdown:
 {
@@ -3007,7 +3007,7 @@ Data Cloud sub-second:
 10:00:15 AM - Customer clicks chat
 10:00:16 AM - Agent has full context, makes personalized offer
 10:00:45 AM - Customer accepts demo
-Perfect: Strike while the iron is hot
+Optimal timing: Strike while the iron is hot
 ```
 
 **Configuration (Still No Code):**
@@ -3135,7 +3135,7 @@ Timeline: 300ms from action to recommendation
 
 **Time to Build:** 2-3 days (enable real-time + configure personalization)  
 **Maintenance:** Low (managed service)  
-**Performance:** Exceptional (< 1 second from event to action)  
+**Performance:** Sub-second (< 1 second from event to action)  
 **Customer Experience:** Personalized in real-time, not tomorrow  
 
 ---
