@@ -24,13 +24,13 @@ graph TB
         PL1 --> AG1
     end
     
-    %% Enhanced color coding by service layer and type
-    classDef salesforce fill:#a7e8a7,stroke:#4caf50,stroke-width:3px
-    classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
-    classDef auth fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    classDef compute fill:#fff3e0,stroke:#ff9800,stroke-width:2px
-    classDef storage fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
-    classDef events fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    %% Enhanced color coding by service layer and type (dark mode friendly)
+    classDef salesforce fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    classDef security fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#ffffff
+    classDef auth fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    classDef compute fill:#92400e,stroke:#f59e0b,stroke-width:2px,color:#ffffff
+    classDef storage fill:#581c87,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    classDef events fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
     
     class SF1 salesforce
     class NC1,PL1 auth
@@ -64,16 +64,16 @@ graph TB
         SF2 <-->|"🔔 Platform Events"| MS1
     end
     
-    %% Enhanced color coding by service layer and type
-    classDef salesforce fill:#a7e8a7,stroke:#4caf50,stroke-width:3px
-    classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
-    classDef auth fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    classDef integration fill:#fff3e0,stroke:#ff9800,stroke-width:2px
-    classDef connector fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
-    classDef api_system fill:#fce4ec,stroke:#ad1457,stroke-width:2px
-    classDef api_process fill:#f1f8e9,stroke:#689f38,stroke-width:2px
-    classDef api_experience fill:#fff8e1,stroke:#fbc02d,stroke-width:2px
-    classDef external fill:#f5f5f5,stroke:#616161,stroke-width:2px
+    %% Enhanced color coding by service layer and type (dark mode friendly)
+    classDef salesforce fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    classDef security fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#ffffff
+    classDef auth fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    classDef integration fill:#92400e,stroke:#f59e0b,stroke-width:2px,color:#ffffff
+    classDef connector fill:#0c4a6e,stroke:#0ea5e9,stroke-width:2px,color:#ffffff
+    classDef api_system fill:#9f1239,stroke:#f43f5e,stroke-width:2px,color:#ffffff
+    classDef api_process fill:#365314,stroke:#84cc16,stroke-width:2px,color:#ffffff
+    classDef api_experience fill:#a16207,stroke:#eab308,stroke-width:2px,color:#ffffff
+    classDef external fill:#374151,stroke:#9ca3af,stroke-width:2px,color:#ffffff
     
     class SF2 salesforce
     class NC2 auth
@@ -116,8 +116,8 @@ graph TB
         VPN -.-> AG2
     end
     
-    classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
-    classDef auth fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef security fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#ffffff
+    classDef auth fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff
     
     class NC3,VPN auth
     class AG2,MS2 security
@@ -197,9 +197,9 @@ graph TB
         FLE -.->|"🔒 Data Protection"| SF4
     end
     
-    classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
-    classDef encryption fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef auth fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef security fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#ffffff
+    classDef encryption fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
+    classDef auth fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff
     
     class NC4,PL2,IAM,SEC auth
     class FLE,PE encryption

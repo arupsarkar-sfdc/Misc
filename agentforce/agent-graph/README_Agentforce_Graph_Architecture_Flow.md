@@ -42,11 +42,11 @@ graph TB
     
     User[User Query] --> Execute
     
-    style AF fill:#f0e68c,stroke:#daa520,stroke-width:2px
-    style JSON fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-    style Graph fill:#d4edda,stroke:#28a745,stroke-width:3px
-    style Daisy fill:#fff3cd,stroke:#ffc107,stroke-width:3px
-    style Execute fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style AF fill:#2c3e50,stroke:#f39c12,stroke-width:2px,color:#ffffff
+    style JSON fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style Graph fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    style Daisy fill:#92400e,stroke:#f59e0b,stroke-width:3px,color:#ffffff
+    style Execute fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
 ```
 
 ### What Happens at Runtime
@@ -135,12 +135,12 @@ graph TB
     Loop -->|Yes| Input
     Loop -->|No - Q3 answered| Transition["Transition: FSM Q3_COMPLETE to Q4_REQUIRED"]
     
-    style Memory fill:#e1f5ff,stroke:#0066cc,stroke-width:3px
-    style Guard fill:#d4edda,stroke:#28a745,stroke-width:3px
-    style PreHook fill:#fff3cd,stroke:#ffc107,stroke-width:2px
-    style PostHook fill:#fff3cd,stroke:#ffc107,stroke-width:2px
-    style Stochastic fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-    style UpdateFSM fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style Memory fill:#1e3a8a,stroke:#3b82f6,stroke-width:3px,color:#ffffff
+    style Guard fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    style PreHook fill:#92400e,stroke:#f59e0b,stroke-width:2px,color:#ffffff
+    style PostHook fill:#92400e,stroke:#f59e0b,stroke-width:2px,color:#ffffff
+    style Stochastic fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style UpdateFSM fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
 ```
 
 ### Technical Implementation: Recency Bias + Memory + FSM
@@ -174,11 +174,11 @@ graph LR
     LLM --> Strong[Strong Bias<br/>Toward Recent Goal]
     Strong --> Output[Near-Deterministic<br/>Outcome]
     
-    style Recent fill:#d4edda,stroke:#28a745,stroke-width:3px
-    style Hook fill:#fff3cd,stroke:#ffc107,stroke-width:3px
-    style Strong fill:#d4edda,stroke:#28a745,stroke-width:2px
-    style Output fill:#d4edda,stroke:#28a745,stroke-width:3px
-    style Middle fill:#f8d7da,stroke:#dc3545,stroke-width:1px
+    style Recent fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    style Hook fill:#92400e,stroke:#f59e0b,stroke-width:3px,color:#ffffff
+    style Strong fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
+    style Output fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    style Middle fill:#991b1b,stroke:#ef4444,stroke-width:1px,color:#ffffff
 ```
 
 ---
@@ -312,8 +312,8 @@ graph TB
     
     Integration --> Benefits[Benefits:<br/>• Predictable outcomes<br/>• Natural conversations<br/>• Goal completion<br/>• Interruptible workflows<br/>• Multi-agent coordination]
     
-    style Integration fill:#d4edda,stroke:#28a745,stroke-width:4px
-    style Benefits fill:#d4edda,stroke:#28a745,stroke-width:3px
+    style Integration fill:#166534,stroke:#22c55e,stroke-width:4px,color:#ffffff
+    style Benefits fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
 ```
 
 ---
@@ -532,10 +532,10 @@ graph TB
         AG1 --> Enables[Enables:<br/>• Order-independent completion<br/>• Interruptible workflows<br/>• Context preservation<br/>• Multi-agent coordination]
     end
     
-    style Break fill:#f8d7da,stroke:#dc3545,stroke-width:2px
-    style Enables fill:#d4edda,stroke:#28a745,stroke-width:2px
-    style TF1 fill:#ffcccc,stroke:#cc0000,stroke-width:2px
-    style AG1 fill:#d4edda,stroke:#28a745,stroke-width:2px
+    style Break fill:#991b1b,stroke:#ef4444,stroke-width:2px,color:#ffffff
+    style Enables fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
+    style TF1 fill:#7f1d1d,stroke:#dc2626,stroke-width:2px,color:#ffffff
+    style AG1 fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
 ```
 
 ---

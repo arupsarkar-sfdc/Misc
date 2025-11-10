@@ -45,16 +45,16 @@ graph TB
     HULU_CONTACT --> FEDERATED
     FEDERATED --> COLLAB
     
-    style NIKE_DC fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-    style NIKE_SEG fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style NIKE_CONTACT fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style HULU_DC fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
-    style HULU_SEG fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style HULU_CONTACT fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style TEMPLATE fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style FEDERATED fill:#e8f5e9,stroke:#388e3c,stroke-width:3px
-    style COLLAB fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
-    style TEMPLATES fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style NIKE_DC fill:#1e3a8a,stroke:#3b82f6,stroke-width:3px,color:#ffffff
+    style NIKE_SEG fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style NIKE_CONTACT fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style HULU_DC fill:#581c87,stroke:#a855f7,stroke-width:3px,color:#ffffff
+    style HULU_SEG fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style HULU_CONTACT fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style TEMPLATE fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
+    style FEDERATED fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    style COLLAB fill:#166534,stroke:#22c55e,stroke-width:2px,color:#ffffff
+    style TEMPLATES fill:#92400e,stroke:#f59e0b,stroke-width:2px,color:#ffffff
 ```
 
 ---
@@ -91,8 +91,8 @@ graph LR
     
     Provider -->|Clean Room| Consumer
     
-    style Provider fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
-    style Consumer fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
+    style Provider fill:#581c87,stroke:#a855f7,stroke-width:3px,color:#ffffff
+    style Consumer fill:#1e3a8a,stroke:#3b82f6,stroke-width:3px,color:#ffffff
 ```
 ```mermaid
 graph LR
@@ -108,9 +108,9 @@ graph LR
     SEG_META --> SEG_MEMBER
     SEG_MEMBER --> CONTACT
     
-    style SEG_META fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style SEG_MEMBER fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style CONTACT fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style SEG_META fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style SEG_MEMBER fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style CONTACT fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
 ```
 
 **Sample Nike Data:**
@@ -138,9 +138,9 @@ graph LR
     H_SEG_META --> H_SEG_MEMBER
     H_SEG_MEMBER --> H_CONTACT
     
-    style H_SEG_META fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style H_SEG_MEMBER fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style H_CONTACT fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style H_SEG_META fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style H_SEG_MEMBER fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style H_CONTACT fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
 ```
 
 **Sample Hulu Data:**
@@ -185,14 +185,14 @@ graph TB
     
     MATCH --> RESULT["Match Results<br/>━━━━━━━━━━━━━━<br/>Total Overlap: 2<br/>hash456 ✓<br/>hash789 ✓<br/><br/>Aggregate Only!"]
     
-    style N1 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style N2 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style N3 fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style H1 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style H2 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style H3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style MATCH fill:#e8f5e9,stroke:#388e3c,stroke-width:3px
-    style RESULT fill:#fff3e0,stroke:#f57c00,stroke-width:3px
+    style N1 fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style N2 fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style N3 fill:#1e40af,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+    style H1 fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style H2 fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style H3 fill:#6b21a8,stroke:#a855f7,stroke-width:2px,color:#ffffff
+    style MATCH fill:#166534,stroke:#22c55e,stroke-width:3px,color:#ffffff
+    style RESULT fill:#92400e,stroke:#f59e0b,stroke-width:3px,color:#ffffff
 ```
 
 **What Nike Receives:**

@@ -1,0 +1,8 @@
+# Files to exclude from version control
+segmentation/cam-architecture.png
+segmentation/design.md
+segmentation/scone.txt
+
+# System files
+.DS_Store
+.cursor/
