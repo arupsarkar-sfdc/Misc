@@ -12,12 +12,15 @@ This analysis uses design pattern definitions and concepts from:
 
 ## Table of Contents
 
-### Part 1: How Segmentation Works
+### [Part 1: How Segmentation Works](#part-1-how-segmentation-works)
 1. [System Overview](#system-overview)
 2. [Core Operations: Counting vs Materialization](#core-operations-counting-vs-materialization)
 3. [End-to-End Flow](#end-to-end-flow)
+4. [Consent, Subscriptions & Preferences Integration](#consent-subscriptions--preferences-integration)
+5. [Data Enrichment & Mastering Processes](#data-enrichment--mastering-processes)
+6. [Contact & Account Master (CAM) Architecture Integration](#contact--account-master-cam-architecture-integration)
 
-### Part 2: Design Patterns Implementation
+### [Part 2: Design Patterns Implementation](#part-2-design-patterns-implementation)
 **Pattern Coverage:** 12 out of 16 patterns (75% coverage)
 - **Structural Patterns:** 4 out of 6 (67%)
 - **Behavioral Patterns:** 6 out of 7 (86%)
@@ -43,6 +46,10 @@ This analysis uses design pattern definitions and concepts from:
 
 #### Architectural Patterns
 15. [Repository Pattern](#15-repository-pattern)
+
+### [Part 3: Segmentation Product Lines](#part-3-segmentation-product-lines)
+16. [Segmentation Engine in Data Cloud Ecosystem](#segmentation-engine-in-data-cloud-ecosystem)
+17. [Conclusion](#conclusion)
 
 ---
 
@@ -1916,7 +1923,7 @@ S3 benefits:
 
 ---
 
-## Comparison with Data Cloud Patterns
+# Part 3: Segmentation Product Lines
 
 ### Segmentation Engine in Data Cloud Ecosystem
 
