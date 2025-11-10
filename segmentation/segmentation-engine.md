@@ -53,6 +53,7 @@ This analysis uses design pattern definitions and concepts from:
 
 ---
 
+<a id="part-1-how-segmentation-works"></a>
 # Part 1: How Segmentation Works
 
 The Segmentation Engine is built on the **Scone microservices framework** (Spring Boot) and orchestrates segment population calculation through two distinct operations: **Counting** (preview/estimate) and **Materialization** (activation-ready).
@@ -353,6 +354,7 @@ WHERE up.lifetime_value > 1000
 
 ---
 
+<a id="part-2-design-patterns-implementation"></a>
 # Part 2: Design Patterns Implementation
 
 ---
@@ -1923,6 +1925,7 @@ S3 benefits:
 
 ---
 
+<a id="part-3-segmentation-product-lines"></a>
 # Part 3: Segmentation Product Lines
 
 ### Segmentation Engine in Data Cloud Ecosystem
