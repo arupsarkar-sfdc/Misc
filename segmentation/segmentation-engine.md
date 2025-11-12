@@ -20,36 +20,9 @@ This analysis uses design pattern definitions and concepts from:
 5. [Data Enrichment & Mastering Processes](#data-enrichment--mastering-processes)
 6. [Contact & Account Master (CAM) Architecture Integration](#contact--account-master-cam-architecture-integration)
 
-### [Part 2: Design Patterns Implementation](#part-2-design-patterns-implementation)
-**Pattern Coverage:** 12 out of 16 patterns (75% coverage)
-- **Structural Patterns:** 4 out of 6 (67%)
-- **Behavioral Patterns:** 6 out of 7 (86%)
-- **Creational Patterns:** 1 out of 2 (50%)
-- **Architectural Patterns:** 1 (Repository Pattern)
-
-#### Structural Patterns
-4. [Adapter Pattern](#4-adapter-pattern)
-5. [Facade Pattern](#5-facade-pattern)
-6. [Proxy Pattern](#6-proxy-pattern)
-7. [Bridge Pattern](#7-bridge-pattern)
-
-#### Behavioral Patterns
-8. [Strategy Pattern](#8-strategy-pattern)
-9. [Observer Pattern](#9-observer-pattern)
-10. [Command Pattern](#10-command-pattern)
-11. [Template Method Pattern](#11-template-method-pattern)
-12. [Chain of Responsibility Pattern](#12-chain-of-responsibility-pattern)
-13. [Mediator Pattern](#13-mediator-pattern)
-
-#### Creational Patterns
-14. [Factory Pattern](#14-factory-pattern)
-
-#### Architectural Patterns
-15. [Repository Pattern](#15-repository-pattern)
-
-### [Part 3: Segmentation Product Lines](#part-3-segmentation-product-lines)
-16. [Segmentation Engine in Data Cloud Ecosystem](#segmentation-engine-in-data-cloud-ecosystem)
-17. [Conclusion](#conclusion)
+### [Part 2: Segmentation Product Lines](#part-2-segmentation-product-lines)
+7. [Segmentation Engine in Data Cloud Ecosystem](#segmentation-engine-in-data-cloud-ecosystem)
+8. [Conclusion](#conclusion)
 
 ---
 
@@ -354,12 +327,10 @@ WHERE up.lifetime_value > 1000
 
 ---
 
-<a id="part-2-design-patterns-implementation"></a>
-# Part 2: Design Patterns Implementation
+<a id="part-2-segmentation-product-lines"></a>
+# Part 2: Segmentation Product Lines
 
----
-
-## 4. ADAPTER PATTERN
+### Segmentation Engine in Data Cloud Ecosystem
 
 ### Why Adapter Pattern?
 
@@ -1925,9 +1896,6 @@ S3 benefits:
 
 ---
 
-<a id="part-3-segmentation-product-lines"></a>
-# Part 3: Segmentation Product Lines
-
 ### Segmentation Engine in Data Cloud Ecosystem
 
 ```mermaid
@@ -2390,31 +2358,21 @@ The Segmentation Engine serves as a critical component in the Data Cloud activat
 2. **Scone Microservices Framework**  
    https://git.soma.salesforce.com/services/sfdc-bazel/tree/main/projects/libs/scone
 
-### Design Pattern References
-3. **Refactoring.Guru Design Patterns**  
-   https://refactoring.guru/design-patterns
-   
-4. **Gang of Four (GoF) Design Patterns**  
-   Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*
-
 ### Architecture Documentation
-5. **Unified Profile Segmentation Documentation**  
+3. **Unified Profile Segmentation Documentation**  
    https://confluence.internal.salesforce.com/spaces/UNIFIEDPROFILE/pages/1079183456/Segmentation
 
-6. **Salesforce Data Cloud Segmentation Service Documentation**  
+4. **Salesforce Data Cloud Segmentation Service Documentation**  
    Internal Salesforce Documentation
 
-7. **Understanding Consent, Subscriptions and Preferences at Salesforce: A Dummies Guide**  
+5. **Understanding Consent, Subscriptions and Preferences at Salesforce: A Dummies Guide**  
    https://confluence.internal.salesforce.com/spaces/UNIFIEDPROFILE/pages/1078460747/Understanding+Consent+Subscriptions+and+Preferences+at+Salesforce+A+Dummies+Guide
 
-8. **Contact & Account Master - Solution**  
+6. **Contact & Account Master - Solution**  
    https://confluence.internal.salesforce.com/spaces/UNIFIEDPROFILE/pages/1078460951/Contact+Account+Master+-+Solution
 
-9. **Scoring & Segmentation-Categorizing- Data Enrichment**  
+7. **Scoring & Segmentation-Categorizing- Data Enrichment**  
    https://confluence.internal.salesforce.com/spaces/UNIFIEDPROFILE/pages/1078461534/Scoring+Segmentation-Categorizing-+Data+Enrichment
-
-10. **Modern Architectural Patterns**  
-    Industry best practices for microservices and distributed systems
 
 ---
 
