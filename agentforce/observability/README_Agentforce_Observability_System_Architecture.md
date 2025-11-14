@@ -43,18 +43,12 @@ graph TB
     
     AIASSIST[AI-Assisted Building]
     
-    style IDEATE fill:#7c2d12
-    style CONFIG fill:#581c87
-    style TEST fill:#166534
-    style DEPLOY fill:#581c87
-    style SUPERVISE fill:#1e3a8a
-    style AIASSIST fill:#374151
-```
-
-### Phase Breakdown
-
-| Phase | Components | Status | Purpose |
-|-------|-----------|--------|---------|
+    style Agent fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style Trust fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style Kafka fill:#fcd34d,stroke:#92400e,stroke-width:2px,color:#000
+    style S3 fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style DC fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000,stroke:#4338ca,stroke-width:2px,color:#000
+    style AIASSIST fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000--------|
 | **Ideate** | Agent-Assisted Creation | GA | Brainstorm and design agent capabilities |
 | **Configure** | Agent Builder | GA | Build and configure agent logic, topics, and actions |
 | **Test** | Testing Center | GA | Validate agent behavior with test scenarios |
@@ -92,11 +86,11 @@ graph TB
     STDM --> AUDIT
     STDM --> CRM
     
-    style IE fill:#166534
-    style ANAL fill:#1e3a8a
-    style RAG fill:#854d0e
-    style HEALTH fill:#7c2d12
-    style STDM fill:#581c87
+    style IE fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style ANAL fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style RAG fill:#fde68a,stroke:#92400e,stroke-width:2px,color:#000
+    style HEALTH fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style STDM fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
 ```
 
 ### 1. Interaction Explorer (AIE)

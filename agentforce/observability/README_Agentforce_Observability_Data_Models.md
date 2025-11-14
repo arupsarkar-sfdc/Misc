@@ -443,13 +443,13 @@ graph LR
     B -->|UI| F[Interaction Explorer]
     B -->|Reports| G[Analytics Dashboard]
     
-    style A fill:#1e3a8a,stroke:#60a5fa,color:#ffffff
-    style B fill:#166534,stroke:#4ade80,color:#ffffff
-    style C fill:#7c2d12,stroke:#fb923c,color:#ffffff
-    style D fill:#581c87,stroke:#c084fc,color:#ffffff
-    style E fill:#991b1b,stroke:#f87171,color:#ffffff
-    style F fill:#374151,stroke:#9ca3af,color:#ffffff
-    style G fill:#1e3a8a,stroke:#60a5fa,color:#ffffff
+    style A fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style B fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style C fill:#fcd34d,stroke:#92400e,stroke-width:2px,color:#000
+    style D fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style E fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style F fill:#a5f3fc,stroke:#0e7490,stroke-width:2px,color:#000
+    style G fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000
 ```
 
 ### Integration Points
@@ -605,14 +605,14 @@ graph TD
     G[Aggregation Rules] -.->|Configuration| B
     H[Business Logic] -.->|Configuration| B
     
-    style A fill:#1e3a8a,stroke:#60a5fa,color:#ffffff
-    style B fill:#166534,stroke:#4ade80,color:#ffffff
-    style C fill:#7c2d12,stroke:#fb923c,color:#ffffff
-    style D fill:#581c87,stroke:#c084fc,color:#ffffff
-    style E fill:#991b1b,stroke:#f87171,color:#ffffff
-    style F fill:#374151,stroke:#9ca3af,color:#ffffff
-    style G fill:#374151,stroke:#9ca3af,color:#ffffff
-    style H fill:#374151,stroke:#9ca3af,color:#ffffff
+    style A fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style B fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style C fill:#fcd34d,stroke:#92400e,stroke-width:2px,color:#000
+    style D fill:#a5f3fc,stroke:#0e7490,stroke-width:2px,color:#000
+    style E fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style F fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000
+    style G fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
+    style H fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
 ```
 
 ### Calculated Metrics

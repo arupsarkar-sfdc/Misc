@@ -158,10 +158,10 @@ graph TD
     STEP15 --> ENDP1([Pipeline Complete])
     STEP14 --> ENDP1
     
-    style Step1 fill:#854d0e
-    style Step2 fill:#166534
-    style Step3 fill:#1e3a8a
-    style Step4 fill:#581c87
+    style Step1 fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
+    style Step2 fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style Step3 fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style Step4 fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
 ```
 
 ### Step-by-Step Breakdown
@@ -225,9 +225,9 @@ graph TD
     A10 --> ENDP2([Pipeline Complete])
     S9 --> ENDP2
     
-    style CHECK fill:#374151
-    style AsyncRetry fill:#991b1b
-    style SyncRetry fill:#991b1b
+    style CHECK fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000
+    style AsyncRetry fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style SyncRetry fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
 ```
 
 ### Enhanced Step-by-Step Breakdown
@@ -680,10 +680,10 @@ graph TD
     WRITE --> END([Pipeline Complete])
     DEFER --> END
     
-    style CHECK fill:#374151
-    style ASYNC fill:#991b1b
-    style SYNC fill:#1e3a8a
-    style DEFER fill:#854d0e
+    style CHECK fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000
+    style ASYNC fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style SYNC fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style DEFER fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
 ```
 
 ### Error Context Enhancement
@@ -862,12 +862,12 @@ graph TB
     STEP3 --> STEP4
     STEP4 --> OUTPUT
     
-    style INPUT fill:#854d0e
-    style STEP1 fill:#7c2d12
-    style STEP2 fill:#166534
-    style STEP3 fill:#1e3a8a
-    style STEP4 fill:#581c87
-    style OUTPUT fill:#166534
+    style INPUT fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
+    style STEP1 fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style STEP2 fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style STEP3 fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style STEP4 fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style OUTPUT fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
 ```
 
 ### Step 1: Agglomerative Clustering
