@@ -43,12 +43,18 @@ graph TB
     
     AIASSIST[AI-Assisted Building]
     
-    style Agent fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
-    style Trust fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style Kafka fill:#fcd34d,stroke:#92400e,stroke-width:2px,color:#000
-    style S3 fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
-    style DC fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000,stroke:#4338ca,stroke-width:2px,color:#000
-    style AIASSIST fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000--------|
+    style IDEATE fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style CONFIG fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style TEST fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style DEPLOY fill:#fbbf24,stroke:#92400e,stroke-width:2px,color:#000
+    style SUPERVISE fill:#a5b4fc,stroke:#4338ca,stroke-width:2px,color:#000
+    style AIASSIST fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000
+```
+
+### Phase Breakdown
+
+| Phase | Components | Status | Purpose |
+|-------|-----------|--------|---------|
 | **Ideate** | Agent-Assisted Creation | GA | Brainstorm and design agent capabilities |
 | **Configure** | Agent Builder | GA | Build and configure agent logic, topics, and actions |
 | **Test** | Testing Center | GA | Validate agent behavior with test scenarios |
@@ -491,10 +497,10 @@ graph TB
     ACEUI --> AIECE
     ACEUI --> AIECEC
     
-    style PULL fill:#854d0e
-    style CLUSTERING fill:#7c2d12
-    style AIECE fill:#166534
-    style CRONJOB1 fill:#1e3a8a
+    style PULL fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
+    style CLUSTERING fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style AIECE fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style CRONJOB1 fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
 ```
 
 **Key Components**:
@@ -565,12 +571,12 @@ graph LR
     SDM --> CLUSTER
     SDM --> SUBSESS
     
-    style LDS fill:#1e3a8a
-    style SDM fill:#166534
-    style TURN fill:#581c87
-    style EXEC fill:#581c87
-    style CLUSTER fill:#581c87
-    style SUBSESS fill:#581c87
+    style LDS fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style SDM fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style TURN fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style EXEC fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style CLUSTER fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style SUBSESS fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
 ```
 
 **Data Access Pattern**:
@@ -1072,9 +1078,9 @@ graph LR
     A[Einstein GPT Org<br/>Preference = TRUE] --> B[Inner Enable Hook]
     B --> C[Provision AIE Hawking<br/>Tenant]
     
-    style A fill:#854d0e
-    style B fill:#166534
-    style C fill:#1e3a8a
+    style A fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
+    style B fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style C fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
 ```
 
 ### Backfilling Existing Orgs
@@ -1273,13 +1279,13 @@ graph TD
     M --> N[Admin Assigns<br/>InteractionExplorerViewer<br/>Permission Set]
     N --> O[✅ Users Can Access AIE UI]
     
-    style A fill:#854d0e
-    style E fill:#166534
-    style I fill:#166534
-    style M fill:#166534
-    style O fill:#166534
-    style FAIL1 fill:#991b1b
-    style FAIL2 fill:#991b1b
+    style A fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
+    style E fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style I fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style M fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style O fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
+    style FAIL1 fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style FAIL2 fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
 ```
 
 ---
