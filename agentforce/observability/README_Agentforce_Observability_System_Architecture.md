@@ -43,12 +43,12 @@ graph TB
     
     AIASSIST[AI-Assisted Building]
     
-    style IDEATE fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
-    style CONFIG fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
-    style TEST fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style DEPLOY fill:#fbbf24,stroke:#92400e,stroke-width:2px,color:#000
-    style SUPERVISE fill:#a5b4fc,stroke:#4338ca,stroke-width:2px,color:#000
-    style AIASSIST fill:#d1d5db,stroke:#374151,stroke-width:2px,color:#000
+    style IDEATE fill:#B3D9FF,stroke:#0066CC,stroke-width:2px,color:#000
+    style CONFIG fill:#D9B3FF,stroke:#7700CC,stroke-width:2px,color:#000
+    style TEST fill:#FFB3B3,stroke:#CC0000,stroke-width:2px,color:#000
+    style DEPLOY fill:#FFE6B3,stroke:#CC8800,stroke-width:2px,color:#000
+    style SUPERVISE fill:#B3FFE6,stroke:#00CC88,stroke-width:2px,color:#000
+    style AIASSIST fill:#E6E6E6,stroke:#4D4D4D,stroke-width:2px,color:#000
 ```
 
 ### Phase Breakdown
@@ -92,11 +92,11 @@ graph TB
     STDM --> AUDIT
     STDM --> CRM
     
-    style IE fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style ANAL fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
-    style RAG fill:#fde68a,stroke:#92400e,stroke-width:2px,color:#000
-    style HEALTH fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
-    style STDM fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style IE fill:#FFB3B3,stroke:#CC0000,stroke-width:2px,color:#000
+    style ANAL fill:#B3D9FF,stroke:#0066CC,stroke-width:2px,color:#000
+    style RAG fill:#FFE6B3,stroke:#CC8800,stroke-width:2px,color:#000
+    style HEALTH fill:#FFB3E6,stroke:#CC0088,stroke-width:2px,color:#000
+    style STDM fill:#D9B3FF,stroke:#7700CC,stroke-width:2px,color:#000
 ```
 
 ### 1. Interaction Explorer (AIE)
@@ -253,16 +253,16 @@ graph TB
     
     GENAI_FEEDBACK --> GENAI
     
-    style FLOW fill:#1e3a8a
-    style APEX fill:#1e3a8a
-    style RUNTIME fill:#1e3a8a
-    style DC_QUERY fill:#166534
-    style PLANNER fill:#166534
-    style TELEMETRY fill:#854d0e
-    style GENAI fill:#854d0e
-    style OBSERVABILITY fill:#581c87
-    style INGESTION fill:#581c87
-    style VIZ fill:#166534
+    style FLOW fill:#0066CC,stroke:#003366,stroke-width:2px,color:#FFF
+    style APEX fill:#0066CC,stroke:#003366,stroke-width:2px,color:#FFF
+    style RUNTIME fill:#0066CC,stroke:#003366,stroke-width:2px,color:#FFF
+    style DC_QUERY fill:#CC0000,stroke:#660000,stroke-width:2px,color:#FFF
+    style PLANNER fill:#CC0000,stroke:#660000,stroke-width:2px,color:#FFF
+    style TELEMETRY fill:#CC8800,stroke:#664400,stroke-width:2px,color:#000
+    style GENAI fill:#CC8800,stroke:#664400,stroke-width:2px,color:#000
+    style OBSERVABILITY fill:#7700CC,stroke:#330066,stroke-width:2px,color:#FFF
+    style INGESTION fill:#7700CC,stroke:#330066,stroke-width:2px,color:#FFF
+    style VIZ fill:#CC0000,stroke:#660000,stroke-width:2px,color:#FFF
 ```
 
 ### Architecture Layers
@@ -364,13 +364,13 @@ sequenceDiagram
     
     User->>Planner: Interact with Agent
     
-    rect rgb(30, 58, 138)
+    rect rgb(0, 102, 204)
         Note over Planner,Feedback: AI Platform (Einstein FD)
         Planner->>Feedback: Emit PlatformAuditEvents<br/>in real-time<br/>• Session<br/>• Participant<br/>• Interaction<br/>• Step<br/>• Message
         Feedback->>S3: Session Tracing Topic
     end
     
-    rect rgb(22, 101, 52)
+    rect rgb(204, 0, 0)
         Note over S3,DMO: Data Cloud (CDP FD)
         S3->>Kafka: Kafka Consumer<br/>(10-15 min)
         Kafka->>S3Conn: S3 Connector Ingestion<br/>(5 min)
@@ -497,10 +497,10 @@ graph TB
     ACEUI --> AIECE
     ACEUI --> AIECEC
     
-    style PULL fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
-    style CLUSTERING fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
-    style AIECE fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style CRONJOB1 fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style PULL fill:#FFE6B3,stroke:#CC8800,stroke-width:2px,color:#000
+    style CLUSTERING fill:#FFB3E6,stroke:#CC0088,stroke-width:2px,color:#000
+    style AIECE fill:#FFB3B3,stroke:#CC0000,stroke-width:2px,color:#000
+    style CRONJOB1 fill:#B3D9FF,stroke:#0066CC,stroke-width:2px,color:#000
 ```
 
 **Key Components**:
@@ -571,12 +571,12 @@ graph LR
     SDM --> CLUSTER
     SDM --> SUBSESS
     
-    style LDS fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
-    style SDM fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style TURN fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
-    style EXEC fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
-    style CLUSTER fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
-    style SUBSESS fill:#c4b5fd,stroke:#5b21b6,stroke-width:2px,color:#000
+    style LDS fill:#B3D9FF,stroke:#0066CC,stroke-width:2px,color:#000
+    style SDM fill:#FFB3B3,stroke:#CC0000,stroke-width:2px,color:#000
+    style TURN fill:#D9B3FF,stroke:#7700CC,stroke-width:2px,color:#000
+    style EXEC fill:#D9B3FF,stroke:#7700CC,stroke-width:2px,color:#000
+    style CLUSTER fill:#D9B3FF,stroke:#7700CC,stroke-width:2px,color:#000
+    style SUBSESS fill:#D9B3FF,stroke:#7700CC,stroke-width:2px,color:#000
 ```
 
 **Data Access Pattern**:
@@ -648,12 +648,12 @@ graph TD
     SUCCESS[On Success] --> PERM[Enable OrgPerm:<br/>AgentforceSTDMProvisioned]
     FAIL1 --> LOG[Log Error Details]
     
-    style START fill:#854d0e
-    style VALIDATE fill:#1e3a8a
-    style CREATE fill:#166534
-    style DEPLOY fill:#581c87
-    style SUCCESS fill:#166534
-    style FAIL1 fill:#991b1b
+    style START fill:#CC8800,stroke:#664400,stroke-width:2px,color:#000
+    style VALIDATE fill:#0066CC,stroke:#003366,stroke-width:2px,color:#FFF
+    style CREATE fill:#CC0000,stroke:#660000,stroke-width:2px,color:#FFF
+    style DEPLOY fill:#7700CC,stroke:#330066,stroke-width:2px,color:#FFF
+    style SUCCESS fill:#00CC88,stroke:#006644,stroke-width:2px,color:#000
+    style FAIL1 fill:#CC0088,stroke:#660044,stroke-width:2px,color:#FFF
 ```
 
 #### Provisioning Steps in Detail
@@ -772,13 +772,13 @@ graph TD
     FAIL1 --> LOG[Log Error]
     SKIP --> LOG
     
-    style START fill:#854d0e
-    style ASYNC fill:#1e3a8a
-    style CREATE fill:#166534
-    style HAWK fill:#581c87
-    style SUCCESS fill:#166534
-    style FAIL1 fill:#991b1b
-    style SKIP fill:#854d0e
+    style START fill:#CC8800,stroke:#664400,stroke-width:2px,color:#000
+    style ASYNC fill:#0066CC,stroke:#003366,stroke-width:2px,color:#FFF
+    style CREATE fill:#CC0000,stroke:#660000,stroke-width:2px,color:#FFF
+    style HAWK fill:#7700CC,stroke:#330066,stroke-width:2px,color:#FFF
+    style SUCCESS fill:#00CC88,stroke:#006644,stroke-width:2px,color:#000
+    style FAIL1 fill:#CC0088,stroke:#660044,stroke-width:2px,color:#FFF
+    style SKIP fill:#FFE6B3,stroke:#CC8800,stroke-width:2px,color:#000
 ```
 
 #### Provisioning Steps in Detail
@@ -833,10 +833,10 @@ graph LR
     B --> C[Inner Disable]
     C --> D[Disable OrgPerm<br/>AgentforceSTDMProvisioned]
     
-    style A fill:#991b1b
-    style B fill:#854d0e
-    style C fill:#1e3a8a
-    style D fill:#991b1b
+    style A fill:#CC0088,stroke:#660044,stroke-width:2px,color:#FFF
+    style B fill:#CC8800,stroke:#664400,stroke-width:2px,color:#000
+    style C fill:#0066CC,stroke:#003366,stroke-width:2px,color:#FFF
+    style D fill:#CC0088,stroke:#660044,stroke-width:2px,color:#FFF
 ```
 
 **Actions**:
@@ -1078,9 +1078,9 @@ graph LR
     A[Einstein GPT Org<br/>Preference = TRUE] --> B[Inner Enable Hook]
     B --> C[Provision AIE Hawking<br/>Tenant]
     
-    style A fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
-    style B fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style C fill:#93c5fd,stroke:#1e3a8a,stroke-width:2px,color:#000
+    style A fill:#FFE6B3,stroke:#CC8800,stroke-width:2px,color:#000
+    style B fill:#FFB3B3,stroke:#CC0000,stroke-width:2px,color:#000
+    style C fill:#B3D9FF,stroke:#0066CC,stroke-width:2px,color:#000
 ```
 
 ### Backfilling Existing Orgs
@@ -1279,13 +1279,13 @@ graph TD
     M --> N[Admin Assigns<br/>InteractionExplorerViewer<br/>Permission Set]
     N --> O[✅ Users Can Access AIE UI]
     
-    style A fill:#fde68a,stroke:#78350f,stroke-width:2px,color:#000
-    style E fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style I fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style M fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style O fill:#86efac,stroke:#166534,stroke-width:2px,color:#000
-    style FAIL1 fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
-    style FAIL2 fill:#fca5a1,stroke:#991b1b,stroke-width:2px,color:#000
+    style A fill:#FFE6B3,stroke:#CC8800,stroke-width:2px,color:#000
+    style E fill:#00CC88,stroke:#006644,stroke-width:2px,color:#000
+    style I fill:#00CC88,stroke:#006644,stroke-width:2px,color:#000
+    style M fill:#00CC88,stroke:#006644,stroke-width:2px,color:#000
+    style O fill:#00CC88,stroke:#006644,stroke-width:2px,color:#000
+    style FAIL1 fill:#CC0088,stroke:#660044,stroke-width:2px,color:#FFF
+    style FAIL2 fill:#CC0088,stroke:#660044,stroke-width:2px,color:#FFF
 ```
 
 ---
