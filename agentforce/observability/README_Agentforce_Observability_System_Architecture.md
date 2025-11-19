@@ -172,6 +172,10 @@ graph TB
 
 ### Complete System Diagram
 
+**Abbreviations:**
+- **FD** = Feature Domain (Salesforce architectural tier grouping related services)
+- **OTEL** = OpenTelemetry (open-source observability framework for traces, metrics, and logs)
+
 ```mermaid
 graph TB
     subgraph "Core (Salesforce Org)"
