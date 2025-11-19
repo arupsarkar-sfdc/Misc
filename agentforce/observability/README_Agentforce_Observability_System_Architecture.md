@@ -364,13 +364,13 @@ sequenceDiagram
     
     User->>Planner: Interact with Agent
     
-    rect rgb(0, 102, 204)
+    rect rgba(0, 102, 204, 0.15)
         Note over Planner,Feedback: AI Platform (Einstein FD)
         Planner->>Feedback: Emit PlatformAuditEvents<br/>in real-time<br/>• Session<br/>• Participant<br/>• Interaction<br/>• Step<br/>• Message
         Feedback->>S3: Session Tracing Topic
     end
     
-    rect rgb(204, 0, 0)
+    rect rgba(204, 136, 0, 0.15)
         Note over S3,DMO: Data Cloud (CDP FD)
         S3->>Kafka: Kafka Consumer<br/>(10-15 min)
         Kafka->>S3Conn: S3 Connector Ingestion<br/>(5 min)
