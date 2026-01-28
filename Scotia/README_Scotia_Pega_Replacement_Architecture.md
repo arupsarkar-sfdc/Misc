@@ -3,57 +3,363 @@
 
 ---
 
+## Citation Legend
+
+| Symbol | Meaning |
+|--------|---------|
+| 📄 | **Grounded** - Information extracted directly from source documents |
+| 🔧 | **Recommended** - Proposed architecture based on Salesforce best practices |
+| 🔗 | **Hybrid** - Combines grounded requirements with recommended solutions |
+
+---
+
 ## Table of Contents
 1. [Executive Summary](#executive-summary)
-2. [Current State Architecture](#current-state-architecture)
-3. [Target State Architecture](#target-state-architecture)
-4. [Component Mapping: Current → Target](#component-mapping-current--target)
-5. [Data Flow Diagrams](#data-flow-diagrams)
-6. [Integration Patterns](#integration-patterns)
-7. [Migration Roadmap](#migration-roadmap)
-8. [Technical Implementation Details](#technical-implementation-details)
-9. [Key Benefits & ROI](#key-benefits--roi)
+2. [CPP Platform Overview](#cpp-platform-overview)
+3. [Current State Architecture](#current-state-architecture)
+4. [LiveBank Integration Architecture](#livebank-integration-architecture)
+5. [Target State Architecture](#target-state-architecture)
+6. [Component Mapping: Current → Target](#component-mapping-current--target)
+7. [Data Flow Diagrams](#data-flow-diagrams)
+8. [Integration Patterns](#integration-patterns)
+9. [Migration Roadmap](#migration-roadmap)
+10. [Technical Implementation Details](#technical-implementation-details)
+11. [Key Benefits & ROI](#key-benefits--roi)
 
 ---
 
 ## Executive Summary
 
-### The Challenge
-Scotia's current offer management ecosystem consists of **20+ fragmented systems** spanning Azure, GCP, and on-premise infrastructure. The architecture suffers from:
-- **30-50 day vendor onboarding cycles**
-- **No real-time offer presentation** (critical gap)
-- **Batch-dependent data flows** via SFTP
-- **Complex reconciliation processes**
-- **Vendor dependency challenges**
+### The Challenge 📄
 
-### The Solution
-Replace the Pega-based offer management with a unified **Salesforce stack**:
+> **Source:** `CPP ecosystem and offers.pptx`, Slides 6-7, 15
+
+Scotia's **Customer Personalization Platform (CPP)** offer management ecosystem consists of **20+ fragmented systems** spanning Azure, GCP, and on-premise infrastructure, serving **15 Million customers** with **6.5 Million transactions per day**.
+
+**Critical Pain Points:** 📄 *[Source: CPP ecosystem and offers.pptx, Slide 6]*
+- **46-80 business days** for new offer processing (4.8 months average lead time)
+- **No real-time offer presentation** to Digital and Assisted channels
+- **No centralized data repository** for Campaign & Offer generation
+- **Vendor system cannot process** multiple relationship account offers
+- **Batch-dependent data flows** via SFTP causing fulfillment delays
+- **No end-to-end reconciliation process**
+- **Isolated data flows** causing data duplication
+- **No capability** to inquire/maintain all customer's offers in one place
+- **Performance issues** with lack of robust monitoring
+- **Missing error handling mechanisms**
+
+### The Solution 🔧
+
+> **Type:** Recommended Architecture (Salesforce Best Practices)
+
+Replace the Pega-based CPP offer management with a unified **Salesforce stack**:
 
 | Component | Role | Replaces |
 |-----------|------|----------|
-| **Salesforce Data Cloud** | The Hub & Brain | CDP, Event Exchange Hub, EDW |
-| **Loyalty Management** | The Offer Engine | Orion, Constellation, Nova, Promo Code App |
-| **Marketing Cloud** | The Orchestration Engine | Homegrown Interface, EDAT |
-| **MC Personalization** | Real-Time Inbound Engine | BRL, CMEE, R/T gaps |
+| **Salesforce Data Cloud** | The Hub & Brain | CDP, Event Exchange Hub, EDW, CCP-PEGA 📄 |
+| **Loyalty Management** | The Offer Engine | Orion, Constellation, Nova, Promo Code App 📄 |
+| **Marketing Cloud** | The Orchestration Engine | Homegrown Interface, EDAT, Oracle Responsys 📄 |
+| **MC Personalization** | Real-Time Inbound Engine | BRL, CMEE, R/T gaps 📄 |
+| **Agentforce** | AI-Powered Assistance | Manual processes, Contact Center support 🔧 |
 
-### Key Outcomes
-- **Reduce vendor onboarding from 30-50 days → 3-5 days**
-- **Enable real-time offer decisioning** (closing the R/T gap)
-- **Consolidate 20+ systems → 4 integrated platforms**
-- **Unified customer 360° view** across all touchpoints
+> 📄 System names sourced from: `Architecture-Diagrams.pdf` (user-provided image), `Scotia Retail - LiveBank...png`
+
+### Key Outcomes 🔗
+- **Reduce offer lead time from 4.8 months → 2-3 weeks** 📄 *[Current: CPP ecosystem and offers.pptx, Slide 15]*
+- **Enable real-time offer decisioning** (< 200ms response) 🔧
+- **Support 15M customers, 6.5M daily transactions** with scale 📄 *[Source: CPP ecosystem and offers.pptx, Slide 7]*
+- **Consolidate 20+ systems → 4 integrated platforms** 🔧
+- **Unified customer 360° view** across all touchpoints 🔧
+- **End-to-end reconciliation** with automated tracking 📄 *[Gap: CPP ecosystem and offers.pptx, Slide 6]*
 
 ---
 
-## Current State Architecture
+## CPP Platform Overview 📄
 
-### System Inventory
+> **Source:** `CPP ecosystem and offers.pptx`, Slides 3-4
+
+### Customer Personalization Platform (CPP) - Current Capabilities
+
+The CPP platform delivers personalized offers based on multiple customer dimensions:
+
+#### Product Coverage 📄 *[Source: CPP ecosystem and offers.pptx, Slide 3]*
+
+| Product Category | Products Included |
+|------------------|-------------------|
+| **Day-to-Day Banking** | Personal D2D / Chequing Accounts (Excludes DDA) |
+| **Savings** | Personal Savings Accounts |
+| **Investments** | Investment Accounts (IP) - Registered & Non-Reg Plans |
+| **Premium Banking** | Private Banking |
+| **Credit** | Credit Cards |
+| **Future Expansion** | RESL, Insurance, Loyalty |
+
+#### Customer Relationship Criteria 📄 *[Source: CPP ecosystem and offers.pptx, Slide 3]*
+
+| Criteria Type | Attributes |
+|---------------|------------|
+| **Customer Type** | Personal, Business, etc. |
+| **Account Type** | Sole, Joint, etc. |
+| **Ownership Type** | Primary, Secondary |
+
+#### Transaction Types Monitored 📄 *[Source: CPP ecosystem and offers.pptx, Slide 3]*
+
+| Transaction Category | Specific Transactions |
+|---------------------|----------------------|
+| **Point of Sale** | POS (Credit/Debit) |
+| **Deposits** | Payroll Deposits, Account Funding (Initial Deposit) |
+| **Pre-Authorized** | PAD (Debits), PAT (Transactions), PAC (Contributions) |
+| **Payments** | Bill Payments |
+| **Card Usage** | Visa Debit |
+| **International** | International Money Transfer (IEMT) |
+| **Analytics** | Balance Across Accounts, Smart Money Tools |
+
+#### Customer Segmentation & Tiering 📄 *[Source: CPP ecosystem and offers.pptx, Slide 3]*
+
+- Dynamic customer segmentation
+- Tiering model for loyalty status
+- Propensity scoring for offer targeting
+
+### Customer Interaction Channels 📄 *[Source: CPP ecosystem and offers.pptx, Slide 4]*
+
+```mermaid
+graph LR
+    subgraph Channels["Customer Interaction Channels"]
+        DIGITAL["📱 Digital<br/>Mobile / Online Banking"]
+        BRANCH["🏦 Branch<br/>In-Person"]
+        CC["📞 Contact Centre<br/>Phone Support"]
+    end
+    
+    subgraph OfferTypes["Offer Categories"]
+        ACQ["Acquisition / Mass"]
+        CROSS["Cross-Sell / Deepening"]
+        ENGAGE["Engagement"]
+        RETAIN["Retention"]
+        ALWAYS["Always On / Trigger Based"]
+        MERCHANT["Merchant Based"]
+        TARGETED["Targeted List<br/>(Mono-Product Only)"]
+    end
+    
+    subgraph Priority["Priority Segments"]
+        HIGH["High Value"]
+        ATRISK["At Risk"]
+        NEW["New Customer"]
+        GROWTH["Growth Potential"]
+    end
+    
+    DIGITAL --> ACQ
+    DIGITAL --> CROSS
+    BRANCH --> ENGAGE
+    CC --> RETAIN
+    
+    style DIGITAL fill:#0176d3,color:#fff
+    style ACQ fill:#2e844a,color:#fff
+```
+
+### Offer Value Types 📄 *[Source: CPP ecosystem and offers.pptx, Slide 4]*
+
+| Value Type | Description | Example |
+|------------|-------------|---------|
+| **Cash Reward** | Direct cash bonus to account | $400-$500 bonus |
+| **Fee Incentives** | Discount or waiver on fees | 6-12 month fee waiver |
+| **Scene+ Points** | Loyalty points award | 7500 SCENE+ points |
+| **Tiered Rates** | Variable rates based on thresholds | 1.5% on $X spend |
+| **Combined Offers** | Multiple benefits bundled | Cash + Points + Waiver |
+
+### Sample Offer Use Cases 📄
+
+> **Source:** `CPP ecosystem and offers.pptx`, Slides 9-13
+
+#### Use Case 1: Mass D2D Cash Bonus Offer 📄 *[Source: CPP ecosystem and offers.pptx, Slide 11]*
+```yaml
+Offer: "Open a Preferred/Ultimate Package chequing account to earn $500"
+Type: Mass Acquisition
+Reward: $500 Cash Bonus
+Term: 3 months (August - October)
+Eligibility:
+  - Eligible Accounts: Preferred, Ultimate Package
+  - Exclusions: Employees, existing holders (last 2 years)
+Conditions:
+  - Open new Ultimate/Preferred Package during offer period
+  - Complete 2 of 3 activities within 60 days:
+    - Set up recurring direct deposit (payroll/pension) for 6 months
+    - Set up 2 recurring pre-authorized transactions ($50+ each) for 6 months
+    - Make 1 online bill payment of $50+ via Mobile/Online Banking
+Fulfillment: Deposited within ~9 months from account open date
+```
+
+#### Use Case 2: Tiered Acquisition Offer 📄 *[Source: CPP ecosystem and offers.pptx, Slides 9-10]*
+```yaml
+Offer: "Earn up to $1,000 when you open Registered Plans (RRSP/TFSA/FHSA/RESP)"
+Type: Tiered Acquisition
+Reward_Tiers:
+  - $50: $5,000 - $9,999 investment
+  - $150: $10,000 - $49,999 investment
+  - $300: $50,000 - $99,999 investment
+  - $500: $100,000 - $249,999 investment
+  - $1,000: $250,000+ investment
+Conditions:
+  - Open eligible registered accounts
+  - Transfer/contribute minimum amount within 60 days
+  - Set up $100/month PAC recurring for 6 months
+  - Maintain 90% of book value during 6-month maintenance period
+Fulfillment: Pro-rata bonus across qualifying accounts, paid in 6 monthly installments
+```
+
+#### Use Case 3: Digital Payroll SCENE+ Offer 📄 *[Source: CPP ecosystem and offers.pptx, Slide 12]*
+```yaml
+Offer: "Set up payroll on Preferred/Ultimate Package & get $100 cash bonus"
+Type: Targeted Engagement
+Reward: $100 Cash Bonus
+Term: April - May (6 weeks)
+Eligibility:
+  - Existing Preferred/Ultimate Package holders
+  - Targeted customers only (non-transferable)
+Conditions:
+  - Set up and receive recurring direct deposit (payroll)
+  - Must recur for minimum 3 consecutive months
+Fulfillment: Deposited within ~3 months from last eligible deposit
+```
+
+### Current Technical Challenges (Documented) 📄 *[Source: CPP ecosystem and offers.pptx, Slide 6]*
+
+| # | Challenge | Business Impact |
+|---|-----------|-----------------|
+| 1 | **New offers take 46-80 business days** | Missed market opportunities |
+| 2 | **Vendor system cannot process multiple relationship accounts** | Limited personalization |
+| 3 | **No real-time offer processing mechanism** | Delayed customer engagement |
+| 4 | **No real-time integration with Digital/Assisted channels** | Poor omnichannel experience |
+| 5 | **No centralized data repository for Campaigns & Offers** | Fragmented customer view |
+| 6 | **Isolated data flows with duplication** | Data quality issues |
+| 7 | **No capability to view all customer offers in one place** | Poor agent experience |
+| 8 | **Inefficient/inconsistent vendor data flows** | Reconciliation errors |
+| 9 | **No end-to-end reconciliation process** | Financial leakage risk |
+| 10 | **Performance issues** | Customer-facing latency |
+| 11 | **Lack of robust monitoring** | Reactive issue detection |
+| 12 | **Lack of error handling mechanism** | Silent failures |
+
+### Data Volumes (Current State) 📄 *[Source: CPP ecosystem and offers.pptx, Slide 7]*
+
+| Metric | Current Volume | Growth Projection |
+|--------|----------------|-------------------|
+| **Customer Base** | 15 Million | Growing |
+| **Daily Transactions** | ~6.5 Million | +30% variance |
+| **Relationship Data Updates** | ~60,000/day | Increasing |
+| **Configured Products** | Day-to-Day Banking, Credit Cards | + RESL, Insurance, Loyalty |
+| **Offer Lead Time** | 4.8 months (avg) 📄 *[Slide 15]* | Target: 2-3 weeks 🔧 |
+
+---
+
+## LiveBank Integration Architecture 📄
+
+> **Source:** `Scotia Retail - LiveBank project high level integration diagram 2025-11-07 170539.png`
+
+### Retail & Business Banking Appointment Scheduling 📄
+
+The LiveBank project shows how Salesforce CRM is already being integrated with the existing ecosystem:
+
+```mermaid
+graph TB
+    subgraph Users["User Personas"]
+        FA["👤 Financial Advisors<br/>(Branch & Virtual)"]
+        CEC["👤 CEC Agents<br/>(Contact Center)"]
+        CLIENTS["👤 Clients<br/>(Digital)"]
+    end
+    
+    subgraph Applications["Current Applications (Yellow = Change)"]
+        SALES["Sales Builder<br/>[BDKJ]"]
+        PEGA["CCP - PEGA<br/>[BJ68]"]
+        SHARED["Shared View<br/>[BDKS]"]
+        OAB["OAB<br/>[BGJG]"]
+        NOVA["Nova<br/>[BCCY]"]
+        ORION["Orion<br/>[BDQJ]"]
+    end
+    
+    subgraph NewComponents["New Components (Green)"]
+        APPT_API["Appointment APIs<br/>[BG7M]"]
+        LIVEBANK["Allieron Live Bank<br/>[BK7K]"]
+    end
+    
+    subgraph Integration["Integration Layer"]
+        SF_CRM["Retail Salesforce CRM<br/>[BH7M]"]
+        SF_DATA["Retail Salesforce Data App<br/>Talend [BH84]"]
+        APPT_DATA["Appointment Data"]
+    end
+    
+    subgraph External["External Systems"]
+        O365["Office 365<br/>[B9B8]"]
+        RESPONSYS["Oracle Responsys Emails<br/>[BFC7]"]
+    end
+    
+    FA -->|SSO| SALES
+    FA -->|SSO| PEGA
+    FA -->|SSO| SHARED
+    CEC -->|SSO| OAB
+    CEC -->|SSO| NOVA
+    CEC -->|SSO| ORION
+    CLIENTS -->|SSO| LIVEBANK
+    
+    SALES -->|REST| APPT_API
+    PEGA -->|REST| APPT_API
+    SHARED -->|REST| APPT_API
+    OAB -->|REST| LIVEBANK
+    NOVA -->|REST| LIVEBANK
+    ORION -->|REST| LIVEBANK
+    
+    APPT_API --> SF_CRM
+    LIVEBANK --> SF_CRM
+    SF_CRM -->|Pub/Sub| SF_DATA
+    SF_DATA -->|HTTP/JDBC| APPT_DATA
+    LIVEBANK -->|HTTPs| APPT_DATA
+    
+    SF_CRM -->|EAC<br/>MS Graph APIs| O365
+    SF_CRM -->|REST| RESPONSYS
+    
+    style PEGA fill:#ffd93d,color:#000
+    style LIVEBANK fill:#2e844a,color:#fff
+    style APPT_API fill:#2e844a,color:#fff
+    style SF_CRM fill:#ffd93d,color:#000
+```
+
+### LiveBank System Codes Reference 📄 *[Source: Scotia Retail - LiveBank...png]*
+
+| System | Code | Status | Function |
+|--------|------|--------|----------|
+| **Sales Builder** | BDKJ | Change | Sales enablement |
+| **CCP - PEGA** | BJ68 | Change | Customer Contact Platform (Pega-based) |
+| **Shared View** | BDKS | Change | Shared customer view |
+| **OAB** | BGJG | Change | Online Appointment Booking |
+| **Nova** | BCCY | Change | Offer presentation |
+| **Orion** | BDQJ | Change | Offer management |
+| **Appointment APIs** | BG7M | **New** | Appointment scheduling APIs |
+| **Allieron Live Bank** | BK7K | **New** | Live banking platform |
+| **Retail Salesforce CRM** | BH7M | Change | CRM platform |
+| **Retail SF Data App (Talend)** | BH84 | Existing | Data integration |
+| **Office 365** | B9B8 | Existing | Email/Calendar |
+| **Oracle Responsys Emails** | BFC7 | Existing | Email marketing |
+
+### Integration Legend
+
+| Color/Arrow | Meaning |
+|-------------|---------|
+| 🟢 Green | New component/integration |
+| 🟡 Yellow | Changing component |
+| ⬜ Gray | Existing (no change) |
+| 🔴 Red | Decommission |
+
+---
+
+## Current State Architecture 📄
+
+> **Source:** `Architecture-Diagrams.pdf` (user-provided current state data flow image)
+
+### System Inventory 📄
 
 ```mermaid
 graph TB
     subgraph "Current State: 20+ Fragmented Systems"
         subgraph "Entry Points"
             BNS[("👤 BNS User<br/>Product Setup")]
-            VENDOR["Vendor SaaS<br/>⏱️ 30-50 days"]
+            VENDOR["Vendor SaaS<br/>⏱️ 46-80 days"]
         end
         
         subgraph "Azure Layer"
@@ -162,22 +468,30 @@ sequenceDiagram
     Loyalty->>Bond: 11. Loyalty fulfillment
 ```
 
-### Current State Problems
+### Current State Problems 📄 *[Source: CPP ecosystem and offers.pptx, Slide 6]*
 
 | # | Problem | Impact | Root Cause |
 |---|---------|--------|------------|
-| 1 | **No R/T Offer Presentation** | Lost revenue, poor CX | Adapter to Orion/Constellation/Nova not connected |
-| 2 | **30-50 Day Vendor Onboarding** | Slow time-to-market | Complex manual processes |
-| 3 | **Batch-Only Integration** | Stale data, delayed offers | SFTP dependency |
-| 4 | **20+ Systems** | High maintenance cost | Organic growth without consolidation |
-| 5 | **Manual Reconciliation** | Errors, delays | No unified data model |
-| 6 | **No Testing Framework** | Quality issues | Missing testing management process |
+| 1 | **46-80 Day Offer Lead Time** | 4.8 months avg, missed market opportunities | Complex manual processes, vendor dependencies |
+| 2 | **No R/T Offer Presentation** | Lost revenue, poor CX | Adapter to Orion/Constellation/Nova not connected |
+| 3 | **No Multi-Relationship Support** | Limited personalization | Vendor system cannot process multiple relationship accounts |
+| 4 | **Batch-Only Integration** | Stale data, delayed fulfillment | SFTP dependency, no real-time processing |
+| 5 | **No Centralized Data Repository** | Fragmented customer view | Isolated data flows, duplication |
+| 6 | **20+ Systems** | High maintenance cost | Organic growth without consolidation |
+| 7 | **No Single Offer View** | Poor agent/customer experience | Cannot inquire all offers in one place |
+| 8 | **No End-to-End Reconciliation** | Financial leakage risk | Manual/semi-automated processes |
+| 9 | **Performance Issues** | Customer-facing latency | Lack of robust monitoring |
+| 10 | **No Error Handling** | Silent failures, data loss | Missing error handling mechanism |
 
 ---
 
-## Target State Architecture
+## Target State Architecture 🔧
 
-### Salesforce Stack Overview
+> **Type:** Recommended Architecture (Salesforce Best Practices)
+> 
+> This section proposes how the Salesforce platform can address the documented challenges from the CPP ecosystem.
+
+### Salesforce Stack Overview 🔧
 
 ```mermaid
 graph TB
@@ -304,7 +618,9 @@ sequenceDiagram
 
 ---
 
-## Component Mapping: Current → Target
+## Component Mapping: Current → Target 🔗
+
+> **Type:** Hybrid - Maps grounded current systems 📄 to recommended Salesforce targets 🔧
 
 ### Detailed System Migration Map
 
@@ -403,6 +719,7 @@ flowchart LR
 
 | Current System | Code | Function | Target System | Migration Approach |
 |----------------|------|----------|---------------|-------------------|
+| **CCP - PEGA** | BJ68 | Customer Contact Platform | Data Cloud + Agentforce | AI-powered customer engagement |
 | **CDP** | - | Central data platform | Data Cloud | Direct replacement with enhanced capabilities |
 | **Event Exchange Hub** | BF8M | Real-time events | Data Cloud Streaming | Native streaming ingestion |
 | **EDW** | BCJW | Data warehouse | Data Cloud + Tableau | Unified analytics layer |
@@ -417,6 +734,7 @@ flowchart LR
 | **Homegrown Interface** | EDAT | Orchestration | Marketing Cloud Journey Builder | Visual journey design |
 | **CMEE** | BB8K | Campaign execution | Marketing Cloud Automation | Automated campaigns |
 | **BRL** | B9XX | Business rules | MC Personalization | Real-time decisioning |
+| **Oracle Responsys** | BFC7 | Email marketing | Marketing Cloud Email Studio | Native email platform |
 | **SFTP** | - | File transfer | MuleSoft / Data Cloud Connectors | API-first integration |
 | **Google Storage** | GCP | File storage | Data Cloud Ingestion API | Direct streaming |
 | **Pigeon** | BFB6 | Data pipeline | MuleSoft + Data Cloud | Event-driven flow |
@@ -425,12 +743,21 @@ flowchart LR
 | **Posting API** | TDS BFI4 | Fulfillment | MuleSoft API | API orchestration |
 | **6G** | BC6L | Data extraction | Data Cloud Ingestion | Native connectors |
 | **CBT EDL** | BB4J | EDL ingestion | Data Cloud Batch Ingestion | Scheduled loads |
+| **Sales Builder** | BDKJ | Sales enablement | Sales Cloud | Native CRM |
+| **Shared View** | BDKS | Customer view | Data Cloud Unified Profile | 360° customer view |
+| **Retail SF CRM** | BH7M | CRM platform | Sales Cloud + Data Cloud | Enhanced with Data Cloud |
+| **Appointment APIs** | BG7M | Appointment scheduling | Service Cloud Scheduler | Native scheduling |
+| **Allieron Live Bank** | BK7K | Live banking | Service Cloud + Agentforce | AI-assisted banking |
 
 ---
 
-## Data Flow Diagrams
+## Data Flow Diagrams 🔧
 
-### 1. Customer Onboarding & Profile Creation
+> **Type:** Recommended Architecture (Salesforce Best Practices)
+> 
+> These diagrams show how the proposed Salesforce stack would handle the data flows currently managed by the fragmented system.
+
+### 1. Customer Onboarding & Profile Creation 🔧
 
 ```mermaid
 flowchart TD
@@ -769,9 +1096,11 @@ flowchart TD
 
 ---
 
-## Integration Patterns
+## Integration Patterns 🔧
 
-### 1. Data Ingestion Patterns
+> **Type:** Recommended Architecture (Salesforce & MuleSoft Best Practices)
+
+### 1. Data Ingestion Patterns 🔧
 
 ```mermaid
 flowchart TD
@@ -906,9 +1235,11 @@ flowchart TD
 
 ---
 
-## Migration Roadmap
+## Migration Roadmap 🔧
 
-### Phase Overview
+> **Type:** Recommended Approach (Salesforce Implementation Best Practices)
+
+### Phase Overview 🔧
 
 ```mermaid
 gantt
@@ -946,7 +1277,7 @@ gantt
 
 ### Phase Details
 
-#### Phase 1: Foundation (Months 1-4)
+#### Phase 1: Foundation
 
 | Workstream | Activities | Systems Retired |
 |------------|------------|-----------------|
@@ -955,7 +1286,7 @@ gantt
 | **Data Model** | • DMO design<br/>• Calculated Insights<br/>• Segments | EDW (BCJW), Insight (BERY) |
 | **MuleSoft** | • API design<br/>• Connectors<br/>• Event routing | SFTP, Pigeon (BFB6) |
 
-#### Phase 2: Loyalty & Offers (Months 4-7)
+#### Phase 2: Loyalty & Offers
 
 | Workstream | Activities | Systems Retired |
 |------------|------------|-----------------|
@@ -963,21 +1294,21 @@ gantt
 | **Offer Migration** | • Offer catalog<br/>• Eligibility rules<br/>• Stacking rules | Orion (BDQJ), Constellation (BFYL), Nova (BCCY) |
 | **Promo Engine** | • Promo codes<br/>• Campaign offers<br/>• Redemption logic | Promo Code App (GCP) |
 
-#### Phase 3: Marketing & Personalization (Months 6-9)
+#### Phase 3: Marketing & Personalization
 
 | Workstream | Activities | Systems Retired |
 |------------|------------|-----------------|
 | **Marketing Cloud** | • Journey design<br/>• Automation rules<br/>• Email/SMS templates | Homegrown Interface (EDAT), CMEE (BB8K) |
 | **MC Personalization** | • Real-time decisioning<br/>• Web/Mobile SDK<br/>• Offer ranking | BRL (B9XX) |
 
-#### Phase 4: Agentforce & AI (Months 9-11)
+#### Phase 4: Agentforce & AI
 
 | Workstream | Activities | Systems Retired |
 |------------|------------|-----------------|
 | **Agentforce** | • Agent topics<br/>• Custom actions<br/>• Channel integration | Manual processes |
 | **Einstein AI** | • Propensity models<br/>• Next Best Offer<br/>• Churn prediction | - |
 
-#### Phase 5: Cutover & Optimization (Months 11-14)
+#### Phase 5: Cutover & Optimization
 
 | Workstream | Activities | Systems Retired |
 |------------|------------|-----------------|
@@ -987,9 +1318,13 @@ gantt
 
 ---
 
-## Technical Implementation Details
+## Technical Implementation Details 🔧
 
-### Data Model Objects (DMOs)
+> **Type:** Recommended Configuration (Salesforce Best Practices)
+> 
+> These configurations are proposed based on the offer requirements documented in the CPP ecosystem.
+
+### Data Model Objects (DMOs) 🔧
 
 ```yaml
 # Core DMOs for Scotia Offers
@@ -1289,14 +1624,16 @@ Agent: Scotia_Offer_Agent
 
 ---
 
-## Key Benefits & ROI
+## Key Benefits & ROI 🔗
+
+> **Type:** Hybrid - Compares grounded current metrics 📄 with recommended target outcomes 🔧
 
 ### Quantified Benefits
 
 ```mermaid
 graph LR
-    subgraph Before["Current State Metrics"]
-        B1["⏱️ 30-50 days<br/>Vendor Onboarding"]
+    subgraph Before["Current State Metrics 📄"]
+        B1["⏱️ 46-80 days<br/>Offer Lead Time"]
         B2["❌ No Real-Time<br/>Offer Presentation"]
         B3["📊 20+ Systems<br/>To Maintain"]
         B4["🔄 Manual<br/>Reconciliation"]
@@ -1326,14 +1663,17 @@ graph LR
 
 ### ROI Summary
 
-| Metric | Current | Target | Improvement |
+| Metric | Current 📄 | Target 🔧 | Improvement |
 |--------|---------|--------|-------------|
-| **Vendor Onboarding Time** | 30-50 days | 3-5 days | 90% reduction |
-| **Offer Decisioning Latency** | Batch (hours) | < 200ms | Real-time |
-| **Systems to Maintain** | 20+ | 4 | 80% reduction |
-| **Offer Acceptance Rate** | ~5% | ~15% | 3x increase |
+| **Offer Lead Time** | 46-80 days (4.8 months avg) *[Slide 6, 15]* | 10-15 days | 90% reduction |
+| **Offer Decisioning Latency** | Batch (hours) *[Slide 6]* | < 200ms | Real-time |
+| **Customer Base Supported** | 15 Million *[Slide 7]* | 15+ Million | Scalable |
+| **Daily Transactions** | 6.5 Million *[Slide 7]* | 6.5M+ | Same + 30% growth capacity |
+| **Systems to Maintain** | 20+ *[Architecture diagrams]* | 4 | 80% reduction |
+| **Offer Acceptance Rate** | ~5% (estimated) | ~15% | 3x increase |
+| **Multi-Relationship Offers** | Not Supported *[Slide 6]* | Fully Supported | New capability |
+| **Real-Time Channel Integration** | None *[Slide 6]* | All Channels | New capability |
 | **Operational Cost** | Baseline | -40% | Significant savings |
-| **Time to Market (New Offers)** | Weeks | Days | 5x faster |
 | **Customer Satisfaction** | Baseline | +25 NPS | Improved CX |
 
 ### Strategic Value
@@ -1375,18 +1715,25 @@ graph LR
 | **EDAT** | Current orchestration system |
 | **CID** | Customer Identifier |
 
-### B. Related Documents
+### B. Source Documents
+
+| Document | Description |
+|----------|-------------|
+| **Architecture-Diagrams.pdf** | Current state data flow diagrams |
+| **Scotia-Offers-Pega-Replace-Deal-Doc.pdf** | Pega replacement deal documentation |
+| **CPP ecosystem and offers.pptx** | Customer Personalization Platform overview & offer examples |
+| **CRM Reference Architecture v0.8d.pdf** | CRM reference architecture |
+| **Scotiabank Architecture.pdf** | Overall Scotiabank architecture |
+| **Scotiabank Canadian Banking Architecture.pdf** | Canadian banking specific architecture |
+| **Scotiabank Architecture Diagrams.pdf** | Additional architecture diagrams |
+| **Scotiabank System Context Diagrams.pdf** | System context diagrams |
+| **Scotia Retail - LiveBank project integration diagram.png** | LiveBank integration architecture |
+
+### C. Related Documents
 
 - [Data Cloud Design Patterns](../data-cloud/design-patterns/README_DataCloud_Patterns.md)
 - [Agentforce Architecture](../agentforce/agent-graph/README_Agentforce_Graph_Architecture_Flow.md)
 - [Integration Patterns](../salesforce-integration-architecture-patterns.md)
-
-### C. Contact
-
-For questions about this architecture:
-- **Solution Architect**: [Your Name]
-- **Technical Lead**: [Technical Lead]
-- **Project Manager**: [PM Name]
 
 ---
 
